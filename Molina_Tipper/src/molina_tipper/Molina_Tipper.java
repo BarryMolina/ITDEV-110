@@ -16,6 +16,11 @@ public class Molina_Tipper {
      */
     public static void main(String[] args) {
         // Barry Molina, ITDEV-110-500, Assignment 3
+        TipperApp tip = new TipperApp();
+        tip.intro();
+        tip.getInfo();
+        tip.tipCalc();
+        tip.displayInfo();
     }
     
 }
