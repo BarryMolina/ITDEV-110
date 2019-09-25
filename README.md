@@ -1,2 +1,2 @@
 # ITDEV-110
-Into to Object-Oriented Programming
+Intro to Object-Oriented Programming
