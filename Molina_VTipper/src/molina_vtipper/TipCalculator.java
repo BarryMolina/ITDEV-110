@@ -106,28 +106,33 @@ public class TipCalculator {
         if(splitBill == 'y') {
             System.out.println();
             System.out.println("Split between " + party + " people, each person's " +
-                               "individual bill is $" + df.format(billPerPerson));
+                               "individual bill is $" + df.format(billPerPerson) +
+                               " with tip");
         }
         if(billNoTip < TEN_DOLLARS) {
+            System.out.println();
             tipAtTen = (TEN_DOLLARS - billNoTip) / billNoTip * 100;
             System.out.println("Rounded up to a ten dollar bill, " +
-                                "your tip would be " + tipAtTen + "%");
+                                "your tip would be " + df.format(tipAtTen) + "%");
         }
         
         if(billNoTip < TWENTY_DOLLARS) {
+            System.out.println();
             tipAtTwenty = (TWENTY_DOLLARS - billNoTip) / billNoTip * 100;
             System.out.println("Rounded up to a twenty dollar bill, " +
-                                "your tip would be " + tipAtTwenty + "%");
+                                "your tip would be " + df.format(tipAtTwenty) + "%");
         }
         if(billNoTip < FIFTY_DOLLARS) {
+            System.out.println();
             tipAtFifty = (FIFTY_DOLLARS - billNoTip) / billNoTip * 100;
             System.out.println("Rounded up to a fifty dollar bill, " +
-                                "your tip would be " + tipAtFifty + "%");
+                                "your tip would be " + df.format(tipAtFifty) + "%");
         }
         if(billNoTip < HUNDRED_DOLLARS) {
+            System.out.println();
             tipAtHundred = (HUNDRED_DOLLARS - billNoTip) / billNoTip * 100;
             System.out.println("Rounded up to a hundred dollar bill, " +
-                                "your tip would be " + tipAtHundred + "%");
+                                "your tip would be " + df.format(tipAtHundred) + "%");
         }
         System.out.println();
 
