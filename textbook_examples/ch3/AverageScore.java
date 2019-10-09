@@ -20,8 +20,17 @@ public class AverageScore {
 
         average = (score1 + score2 + score3) / 3.0;
         System.out.println("The average is " + average);
+        public void fName() {
+        }
+        public void functionName() {
+             something blah
+        }
+        
+        
 
         if (average > 95)
             System.out.println("That's a great score!");
     }
+}
+public void functionName() {
 }
