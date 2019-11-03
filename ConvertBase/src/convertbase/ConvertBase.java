@@ -17,22 +17,37 @@ public class ConvertBase {
 	static Scanner keyboard = new Scanner(System.in);
 	static int number;
 	static int base;
-	static String[] allChars = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
+	static char[] allChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 	static int quotient;
 	static int remainder;
 	static String converted = "";
+    static int[] inputArray;
+    static String input;
 
 	public static void main(String[] args) {
 
-        getNumber();
-        getBase();
-        convert();
-        displayNumber();
+        //getNumber();
+        //getBase();
+        //fromDecimal();
+        //displayNumber();
+        getString();
+        indexInput();
+        displayArray(inputArray);
+
+    }
+    public static void displayArray(int[] array) {
+        for (int element : array) {
+            System.out.print(element + " ");
+        }
     }
     
     public static void getNumber() {
         System.out.print("Enter number to convert: ");
         number = keyboard.nextInt();
+    }
+    public static void getString() {
+        System.out.print("Enter number to convert: ");
+        input = keyboard.nextLine();
     }
 
     public static void getBase() {
@@ -40,7 +55,7 @@ public class ConvertBase {
         base = keyboard.nextInt();
     }
 
-    public static void convert() {
+    public static void fromDecimal() {
 		quotient = number;
         while (quotient != 0) {
 			//System.out.println("Calculating remainder");
@@ -55,7 +70,7 @@ public class ConvertBase {
     }
 
     public static void prepend(int digit) {
-        String nextDigit;
+        char nextDigit;
 
 		//System.out.println("Inside prepend digit is " + digit);
 		nextDigit = allChars[digit];
@@ -64,6 +79,30 @@ public class ConvertBase {
 		//System.out.println("Adding nextDigit to converted");
         converted = nextDigit + converted;
 		//System.out.println("converted is now " + converted);
+    }
+
+    public static void toDecimal() {
+        
+    }
+    public static void indexInput() {
+        inputArray = new int[input.length()];
+        for (int i = 0; i < input.length(); i ++) {
+            //System.out.println("Processing char " + input.charAt(i));
+            int x = 0;
+            boolean foundIt = false;
+            while (x < allChars.length && !foundIt) {
+                //System.out.println("Testing if equal to " + allChars[x] );
+                if (input.charAt(i) == (allChars[x])) {
+                    //System.out.println("Found it!");
+                    foundIt = true;
+                    inputArray[i] = x;
+                }
+                x++;
+            }
+        }
+            
+      
+    
     }
 
     public static void displayNumber() {
