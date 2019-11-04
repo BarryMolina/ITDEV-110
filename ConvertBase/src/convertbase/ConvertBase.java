@@ -55,12 +55,6 @@ public class ConvertBase {
 					newNumber + " base " + base2);
 		}
     }
-    public static void displayArray(int[] array) {
-        for (int element : array) {
-            System.out.print(element + " ");
-        }
-		System.out.println();
-    }
     public static void fromDecimal() {
 		quotient = decimal;
         while (quotient != 0) {

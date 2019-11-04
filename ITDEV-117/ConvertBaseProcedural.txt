@@ -1,0 +1,113 @@
+public class ConvertBaseProcedural 
+	
+     static Scanner keyboard = new Scanner(System.in)
+     static char[] allChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}
+     static num[] numberArray
+     static num base1
+     static num base2
+     static num decimal
+     static text number
+     static text newNumber = ""
+     static num quotient
+     static num remainder
+     static num total = 0
+
+     public static void main() 
+
+        output("Enter base to convert from: ")
+        input base1
+
+        if (base1 == 10) 
+            output("Enter number to convert: ")
+            input decimal 
+        
+        else 
+            output("Enter number to convert: ")
+            input number 
+        endif
+        
+        output("Enter base to convert to: ")
+        input base2 
+
+        if (base1 == 10) 
+            quotient = decimal
+            char nextDigit
+            while (quotient != 0) 
+                remainder = quotient % base2
+                nextDigit = allChars[remainder]
+                newNumber = nextDigit + newNumber
+                quotient = quotient / base2
+            endwhile
+            
+            output(decimal + " base 10 is " + newNumber 
+                            + " base " + base2)
+        
+        else if (base2 == 10) 
+            numberArray = new num[number.length()]
+            for (num i = 0; i < number.length(); i++) 
+                num x = 0
+                boolean foundIt = false
+                while (x < allChars.length && !foundIt) 
+                    if (number.charAt(i) == (allChars[x])) 
+                        foundIt = true
+                        numberArray[i] = x
+                    endif
+                    x++
+                endwhile
+            endfor
+            
+            num power = numberArray.length - 1
+            for (num i = 0; i < numberArray.length; i++) 
+                numberArray[i] *= base1 ^ power
+                power--
+            endfor
+            
+            for (num x = 0; x < numberArray.length; x++) 
+                total += numberArray[x]
+            endfor
+            
+            decimal = total
+            output(number + " base " + base1 + " is " +
+                            decimal + " base 10")
+        
+        else 
+            numberArray = new num[number.length()]
+            for (num i = 0; i < number.length(); i ++) 
+                num x = 0
+                boolean foundIt = false
+                while (x < allChars.length && !foundIt) 
+                    if (number.charAt(i) == (allChars[x])) 
+                        foundIt = true
+                        numberArray[i] = x
+                    endif
+                    x++
+                endwhile
+            
+            num power = numberArray.length - 1
+            for (num i = 0; i < numberArray.length; i++) 
+                numberArray[i] *= (num)Math.pow(base1, power)
+                power--
+            endfor
+            
+            for (num x = 0; x < numberArray.length; x++) 
+                total += numberArray[x]
+            endfor
+            
+            decimal = total
+            quotient = decimal
+            char nextDigit
+            while (quotient != 0) 
+                remainder = quotient % base2
+                nextDigit = allChars[remainder]
+                newNumber = nextDigit + newNumber
+                quotient = quotient / base2
+            endwhile
+            
+            output(number + " base " + base1 + " is " +
+                            newNumber + " base " + base2)
+        endif
+    return
+endClass
+        
+    
+
