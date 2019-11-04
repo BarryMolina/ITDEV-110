@@ -11,25 +11,28 @@ public class ConvertBaseProcedural
      static num quotient
      static num remainder
      static num total = 0
+     static bool toDec
+     static bool fromDec
 
      public static void main() 
 
-        output("Enter base to convert from: ")
+        output "Enter base to convert from: "
         input base1
 
         if (base1 == 10) 
-            output("Enter number to convert: ")
+            output "Enter number to convert: "
             input decimal 
         
         else 
-            output("Enter number to convert: ")
+            output "Enter number to convert: "
             input number 
         endif
         
-        output("Enter base to convert to: ")
+        output "Enter base to convert to: "
         input base2 
 
         if (base1 == 10) 
+            fromDec = true
             quotient = decimal
             char nextDigit
             while (quotient != 0) 
@@ -39,10 +42,8 @@ public class ConvertBaseProcedural
                 quotient = quotient / base2
             endwhile
             
-            output(decimal + " base 10 is " + newNumber 
-                            + " base " + base2)
-        
         else if (base2 == 10) 
+            toDec = true
             numberArray = new num[number.length()]
             for (num i = 0; i < number.length(); i++) 
                 num x = 0
@@ -67,8 +68,6 @@ public class ConvertBaseProcedural
             endfor
             
             decimal = total
-            output(number + " base " + base1 + " is " +
-                            decimal + " base 10")
         
         else 
             numberArray = new num[number.length()]
@@ -103,9 +102,11 @@ public class ConvertBaseProcedural
                 quotient = quotient / base2
             endwhile
             
-            output(number + " base " + base1 + " is " +
-                            newNumber + " base " + base2)
         endif
+
+        output (fromDec? decimal : number), " base ", base1, " is ", 
+                (fromDec? decimal : number), " base ", base2
+        
     return
 endClass
         

@@ -11,42 +11,58 @@ public class ConvertBase
     static num quotient
     static num remainder
     static num total = 0
+    static bool toDec
+    static bool fromDec
 
     public static void main() 
+        
+        getInput()
+        convert()
+        displayResult()
 
-        output("Enter base to convert from: ")
+    return
+    
+
+    public static void getInput() 
+
+        output "Enter base to convert from: "
         input base1
 
         if (base1 == 10) 
-            output("Enter number to convert: ")
+            output "Enter number to convert: "
             input decimal
         
         else 
-            output("Enter number to convert: ")
+            output "Enter number to convert: "
             input number
         endif
         
-        output("Enter base to convert to: ")
+        output "Enter base to convert to: "
         input base2
+    
+
+    public static void convert() 
 
         if (base1 == 10) 
+            fromDec = true
             fromDecimal()
-            output(decimal + " base 10 is " + newNumber 
-                    + " base " + base2)
         
         else if (base2 == 10) 
+            toDec = true
             toDecimal()
-            output(number + " base " + base1 + " is " +
-                    decimal + " base 10")
         
         else 
             toDecimal()
             fromDecimal()
-            output(number + " base " + base1 + " is " +
-                    newNumber + " base " + base2)
         endif
-    return
     
+
+    public static void displayResult() 
+
+        output (fromDec? decimal : number), " base ", base1, " is ", 
+                (fromDec? decimal : number), " base ", base2
+    
+
     public static void fromDecimal() 
 	quotient = decimal
         while (quotient != 0) 
@@ -56,6 +72,7 @@ public class ConvertBase
         endwhile
     return
     
+
     public static void toDecimal() 
 	toArray()
 	multiplyArray()
@@ -63,12 +80,14 @@ public class ConvertBase
 	decimal = total
     return
 	
+
     public static void prepend(num digit) 
         char nextDigit
 	nextDigit = allChars[digit]
         newNumber = nextDigit + newNumber
     return
     
+
     public static void toArray() 
         numberArray = new num[number.length()]
         for (num i = 0; i < number.length(); i ++) 
@@ -84,6 +103,7 @@ public class ConvertBase
         endfor
     return
     
+
     public static void multiplyArray() 
         num power = numberArray.length - 1
         for (num i = 0; i < numberArray.length; i++) 
@@ -92,6 +112,7 @@ public class ConvertBase
         endfor
     return
     
+
     public static void addArray() 
         for (num x = 0; x < numberArray.length; x++) 
             total += numberArray[x]
