@@ -12,90 +12,104 @@ import java.util.Scanner;
  * @author barrymolina
  */
 public class ConvertBaseProcedural {
-
-	/**
-	 * @param args the command line arguments
-	 */
-		// TODO code application logic here
+	
 	static Scanner keyboard = new Scanner(System.in);
-	static int number;
-	static int base;
-	static String[] allChars = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
-	static String[] possibleChars;
+	static char[] allChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    static int[] numberArray;
+	static int base1;
+	static int base2;
+	static int decimal;
+	static String number;
+	static String newNumber = "";
 	static int quotient;
 	static int remainder;
-	static String converted = "";
-	static String nextDigit;
+	static int total = 0;
 
 	public static void main(String[] args) {
 
-        //getNumber();
-        //getBase();
-        //convert();
-        //displayNumber();
-        System.out.print("Enter number to convert: ");
-        number = keyboard.nextInt();
-        System.out.print("Enter base between 2-16: ");
-        base = keyboard.nextInt();
-		quotient = number;
-        while (quotient != 0) {
-			//System.out.println("Calculating remainder");
-            remainder = quotient % base;
-			//System.out.println("Remainder is " + remainder);
-			//System.out.println("Prepending remainder");
-
-			//System.out.println("Inside prepend digit is " + digit);
-			nextDigit = allChars[remainder];
-			//System.out.println("nextDigit is " + nextDigit);
-
-			//System.out.println("Adding nextDigit to converted");
-			converted = nextDigit + converted;
-			//System.out.println("converted is now " + converted);
-			//System.out.println("Calculating quotient");
-            quotient = quotient / base;
-			//System.out.println("Quotient is " + quotient);
+		System.out.print("Enter base to convert from: ");
+		base1 = keyboard.nextInt();
+		keyboard.nextLine();
+		if (base1 == 10) {
+			System.out.print("Enter number to convert: ");
+			decimal = keyboard.nextInt();
 		}
-        System.out.println(number + " base " + base + " is " + converted);
-    }
-    
-    public static void getNumber() {
-        System.out.print("Enter number to convert: ");
-        number = keyboard.nextInt();
-    }
-
-    public static void getBase() {
-        System.out.print("Enter base between 2-16: ");
-        base = keyboard.nextInt();
-    }
-
-    public static void convert() {
-		quotient = number;
-        while (quotient != 0) {
-			//System.out.println("Calculating remainder");
-            remainder = quotient % base;
-			//System.out.println("Remainder is " + remainder);
-			//System.out.println("Prepending remainder");
-            prepend(remainder);
-			//System.out.println("Calculating quotient");
-            quotient = quotient / base;
-			//System.out.println("Quotient is " + quotient);
-        }
-    }
-
-    public static void prepend(int digit) {
-        String nextDigit;
-
-		//System.out.println("Inside prepend digit is " + digit);
-		nextDigit = allChars[digit];
-		//System.out.println("nextDigit is " + nextDigit);
-
-		//System.out.println("Adding nextDigit to converted");
-        converted = nextDigit + converted;
-		//System.out.println("converted is now " + converted);
-    }
-
-    public static void displayNumber() {
-        System.out.println(number + " base " + base + " is " + converted);
+		else {
+			System.out.print("Enter number to convert: ");
+			number = keyboard.nextLine();
+		}
+		System.out.print("Enter base to convert to: ");
+		base2 = keyboard.nextInt();
+		if (base1 == 10) {
+			quotient = decimal;
+			char nextDigit;
+			while (quotient != 0) {
+				remainder = quotient % base2;
+				nextDigit = allChars[remainder];
+				newNumber = nextDigit + newNumber;
+				quotient = quotient / base2;
+			}
+			System.out.println(decimal + " base 10 is " + newNumber 
+					+ " base " + base2);
+		}
+		else if (base2 == 10) {
+			numberArray = new int[number.length()];
+			for (int i = 0; i < number.length(); i ++) {
+				int x = 0;
+				boolean foundIt = false;
+				while (x < allChars.length && !foundIt) {
+					if (number.charAt(i) == (allChars[x])) {
+						foundIt = true;
+						numberArray[i] = x;
+					}
+					x++;
+				}
+			}
+			int power = numberArray.length - 1;
+			for (int i = 0; i < numberArray.length; i++) {
+				numberArray[i] *= (int)Math.pow(base1, power);
+				power--;
+			}
+			for (int x = 0; x < numberArray.length; x++) {
+				total += numberArray[x];
+			}
+			decimal = total;
+			System.out.println(number + " base " + base1 + " is " +
+					decimal + " base 10");
+		}
+		else {
+			numberArray = new int[number.length()];
+			for (int i = 0; i < number.length(); i ++) {
+				int x = 0;
+				boolean foundIt = false;
+				while (x < allChars.length && !foundIt) {
+					if (number.charAt(i) == (allChars[x])) {
+						foundIt = true;
+						numberArray[i] = x;
+					}
+					x++;
+				}
+			}
+			int power = numberArray.length - 1;
+			for (int i = 0; i < numberArray.length; i++) {
+				numberArray[i] *= (int)Math.pow(base1, power);
+				power--;
+			}
+			for (int x = 0; x < numberArray.length; x++) {
+				total += numberArray[x];
+			}
+			decimal = total;
+			quotient = decimal;
+			char nextDigit;
+			while (quotient != 0) {
+				remainder = quotient % base2;
+				nextDigit = allChars[remainder];
+				newNumber = nextDigit + newNumber;
+				quotient = quotient / base2;
+			}
+			System.out.println(number + " base " + base1 + " is " +
+					newNumber + " base " + base2);
+		}
     }
 }
 	

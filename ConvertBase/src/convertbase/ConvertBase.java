@@ -10,104 +10,101 @@ import java.util.Scanner;
  * @author barrymolina
  */
 public class ConvertBase {
-
-	/**
-	 * @param args the command line arguments
-	 */
+	
 	static Scanner keyboard = new Scanner(System.in);
-	static int number;
-	static int base;
 	static char[] allChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    static int[] numberArray;
+	static int base1;
+	static int base2;
+	static int decimal;
+	static String number;
+	static String newNumber = "";
 	static int quotient;
 	static int remainder;
-	static String converted = "";
-    static int[] inputArray;
-    static String input;
+	static int total = 0;
 
 	public static void main(String[] args) {
 
-        //getNumber();
-        //getBase();
-        //fromDecimal();
-        //displayNumber();
-        getString();
-        indexInput();
-        displayArray(inputArray);
-
+		System.out.print("Enter base to convert from: ");
+		base1 = keyboard.nextInt();
+		keyboard.nextLine();
+		if (base1 == 10) {
+			System.out.print("Enter number to convert: ");
+			decimal = keyboard.nextInt();
+		}
+		else {
+			System.out.print("Enter number to convert: ");
+			number = keyboard.nextLine();
+		}
+		System.out.print("Enter base to convert to: ");
+		base2 = keyboard.nextInt();
+		if (base1 == 10) {
+			fromDecimal();
+			System.out.println(decimal + " base 10 is " + newNumber 
+					+ " base " + base2);
+		}
+		else if (base2 == 10) {
+			toDecimal();
+			System.out.println(number + " base " + base1 + " is " +
+					decimal + " base 10");
+		}
+		else {
+			toDecimal();
+			fromDecimal();
+			System.out.println(number + " base " + base1 + " is " +
+					newNumber + " base " + base2);
+		}
     }
     public static void displayArray(int[] array) {
         for (int element : array) {
             System.out.print(element + " ");
         }
+		System.out.println();
     }
-    
-    public static void getNumber() {
-        System.out.print("Enter number to convert: ");
-        number = keyboard.nextInt();
-    }
-    public static void getString() {
-        System.out.print("Enter number to convert: ");
-        input = keyboard.nextLine();
-    }
-
-    public static void getBase() {
-        System.out.print("Enter base between 2-16: ");
-        base = keyboard.nextInt();
-    }
-
     public static void fromDecimal() {
-		quotient = number;
+		quotient = decimal;
         while (quotient != 0) {
-			//System.out.println("Calculating remainder");
-            remainder = quotient % base;
-			//System.out.println("Remainder is " + remainder);
-			//System.out.println("Prepending remainder");
+            remainder = quotient % base2;
             prepend(remainder);
-			//System.out.println("Calculating quotient");
-            quotient = quotient / base;
-			//System.out.println("Quotient is " + quotient);
+            quotient = quotient / base2;
         }
     }
-
+	public static void toDecimal() {
+		toArray();
+		multiplyArray();
+		addArray();
+		decimal = total;
+	}
     public static void prepend(int digit) {
         char nextDigit;
-
-		//System.out.println("Inside prepend digit is " + digit);
 		nextDigit = allChars[digit];
-		//System.out.println("nextDigit is " + nextDigit);
-
-		//System.out.println("Adding nextDigit to converted");
-        converted = nextDigit + converted;
-		//System.out.println("converted is now " + converted);
+        newNumber = nextDigit + newNumber;
     }
-
-    public static void toDecimal() {
-        
-    }
-    public static void indexInput() {
-        inputArray = new int[input.length()];
-        for (int i = 0; i < input.length(); i ++) {
-            //System.out.println("Processing char " + input.charAt(i));
+    public static void toArray() {
+        numberArray = new int[number.length()];
+        for (int i = 0; i < number.length(); i ++) {
             int x = 0;
             boolean foundIt = false;
             while (x < allChars.length && !foundIt) {
-                //System.out.println("Testing if equal to " + allChars[x] );
-                if (input.charAt(i) == (allChars[x])) {
-                    //System.out.println("Found it!");
+                if (number.charAt(i) == (allChars[x])) {
                     foundIt = true;
-                    inputArray[i] = x;
+                    numberArray[i] = x;
                 }
                 x++;
             }
         }
-            
-      
-    
+	}
+	public static void multiplyArray() {
+		int power = numberArray.length - 1;
+		for (int i = 0; i < numberArray.length; i++) {
+			numberArray[i] *= (int)Math.pow(base1, power);
+			power--;
+		}
     }
-
-    public static void displayNumber() {
-        System.out.println(number + " base " + base + " is " + converted);
-    }
-	// TODO code application logic here
+	public static void addArray() {
+		for (int x = 0; x < numberArray.length; x++) {
+			total += numberArray[x];
+		}
+	}
 }
 	
