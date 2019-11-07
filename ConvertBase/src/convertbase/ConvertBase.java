@@ -22,9 +22,16 @@ public class ConvertBase {
 	static int quotient;
 	static int remainder;
 	static int total = 0;
+	static boolean toDec;
+	static boolean fromDec;
 
 	public static void main(String[] args) {
 
+		getInput();
+		convert();
+		displayResult();
+    }
+	public static void getInput() {
 		System.out.print("Enter base to convert from: ");
 		base1 = keyboard.nextInt();
 		keyboard.nextLine();
@@ -38,23 +45,25 @@ public class ConvertBase {
 		}
 		System.out.print("Enter base to convert to: ");
 		base2 = keyboard.nextInt();
+	}
+	public static void convert() {
 		if (base1 == 10) {
+			fromDec = true;
 			fromDecimal();
-			System.out.println(decimal + " base 10 is " + newNumber 
-					+ " base " + base2);
 		}
 		else if (base2 == 10) {
+			toDec = true;
 			toDecimal();
-			System.out.println(number + " base " + base1 + " is " +
-					decimal + " base 10");
 		}
 		else {
 			toDecimal();
 			fromDecimal();
-			System.out.println(number + " base " + base1 + " is " +
-					newNumber + " base " + base2);
 		}
-    }
+	}
+	public static void displayResult() {
+		System.out.println((fromDec? decimal : number) + " base " + base1 + 
+				" is " + (toDec? decimal : newNumber) + " base " + base2);
+	}
     public static void fromDecimal() {
 		quotient = decimal;
         while (quotient != 0) {

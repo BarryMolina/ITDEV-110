@@ -24,6 +24,8 @@ public class ConvertBaseProcedural {
 	static int quotient;
 	static int remainder;
 	static int total = 0;
+	static boolean toDec;
+	static boolean fromDec;
 
 	public static void main(String[] args) {
 
@@ -41,6 +43,7 @@ public class ConvertBaseProcedural {
 		System.out.print("Enter base to convert to: ");
 		base2 = keyboard.nextInt();
 		if (base1 == 10) {
+			fromDec = true;
 			quotient = decimal;
 			char nextDigit;
 			while (quotient != 0) {
@@ -49,10 +52,9 @@ public class ConvertBaseProcedural {
 				newNumber = nextDigit + newNumber;
 				quotient = quotient / base2;
 			}
-			System.out.println(decimal + " base 10 is " + newNumber 
-					+ " base " + base2);
 		}
 		else if (base2 == 10) {
+			toDec = true;
 			numberArray = new int[number.length()];
 			for (int i = 0; i < number.length(); i ++) {
 				int x = 0;
@@ -74,8 +76,6 @@ public class ConvertBaseProcedural {
 				total += numberArray[x];
 			}
 			decimal = total;
-			System.out.println(number + " base " + base1 + " is " +
-					decimal + " base 10");
 		}
 		else {
 			numberArray = new int[number.length()];
@@ -107,9 +107,9 @@ public class ConvertBaseProcedural {
 				newNumber = nextDigit + newNumber;
 				quotient = quotient / base2;
 			}
-			System.out.println(number + " base " + base1 + " is " +
-					newNumber + " base " + base2);
 		}
+		System.out.println((fromDec? decimal : number) + " base " + base1 + 
+				" is " + (toDec? decimal : newNumber) + " base " + base2);
     }
 }
 	
