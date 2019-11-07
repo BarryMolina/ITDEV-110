@@ -16,9 +16,10 @@ public class HighLow2 {
 	/**
 	 * @param args the command line arguments
 	 */
-	public static void main(String[] args) throws LineUnavailableException {
+	public static void main(String[] args) throws LineUnavailableException, InterruptedException {
 		Admin a = new Admin();
 		a.intro();
+        Game g = new Game();
 	}
 	
 }

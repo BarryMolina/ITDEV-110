@@ -20,34 +20,40 @@ public class Game {
 	int level;
 	int high;
 	int ranNum;
-	int credits = 0;
-	int wagerAmount;
+	int credits;
+    boolean guessedIt;
+    boolean quit;
 
 
 	public Game() throws LineUnavailableException, InterruptedException {
 		char again = 'y';
 
 		while (again == 'y') {
-			play();
+            play();
 			again = playAgain();
 		}
 	}
 
 	public void play() throws LineUnavailableException, InterruptedException {
 
-
-		getLevel();
-		getHigh();
-		getRandom();
-		
-		System.out.println("You have been awarded 20 credits.");
-		System.out.println("You have a total of " + credits + " credits.");
-
-		makeGuess();
-
-		System.out.println("Available credits: " + credits);
+        credits = 0;
+        guessedIt = false;
+        quit = false;
+        getLevel();
+        getHigh();
+        do {
+            addCredits();
+            getRandom();
+            makeGuess();
+        } while (credits > 0 && !quit); 
+        if (credits <= 0) {
+            System.out.println("You ran out of credits!");
+        }
+        System.out.println("Game Over.");
 	}
 	// gets level selected by user
+    public void newMatch() {
+    }
 	public void getLevel() {
 		boolean validLevel = false;
 		while (!validLevel) {
@@ -75,49 +81,34 @@ public class Game {
 				break;
 		}
 	}
-	public char playAgain() throws LineUnavailableException {
-		System.out.println();
-		System.out.println("Would you like to play again?");
-		System.out.print("y/n: ");
+    public void addCredits() {
+        credits += 20;
+		System.out.println("You have been awarded 20 credits.");
+		System.out.println("You have a total of " + credits + " credits.");
 
-		return keyboard.next().toLowerCase().charAt(0);
-	}
+    }
 	public void getRandom() {
 
 		ranNum = rand.nextInt(high) + 1;
 
 		System.out.println("\nA random number between 1 and " + high + 
-				" has been selected! The game is ready to begin.");
-	}
-	public void wager() {
-		System.out.print("Feeling lucky? Enter amount of credits to wager: ");
-		wagerAmount = keyboard.nextInt();
-		while (wagerAmount > credits) {
-			System.out.println("Thats more credits than you have!");
-			System.out.print("Enter amount of credits to wager: ");
-			wagerAmount = keyboard.nextInt();
-		}
-		
+				" has been selected! The match is ready to begin.");
 	}
 	public void makeGuess() throws LineUnavailableException, InterruptedException {
+        int wagerAmount = 0;
 		int guess;
 		int guessCount = 0;
-		boolean guessedIt = false;
-		boolean quit = false;
 
-		System.out.println("At the prompt, enter a number or 0 to quit");
 
-		while (!quit && !guessedIt) {
-			wager();
-			System.out.print(">>> ");
+        System.out.print("Enter amount of credits to wager or 0 to quit: ");
+        wagerAmount = keyboard.nextInt();
+		while (wagerAmount != 0 && !guessedIt && credits > 0) {
+            System.out.println("What is your guess?: ");
 			guess = keyboard.nextInt();
 
 			guessCount++;
 
-			if (guess == 0) {
-				quit = true;
-			}
-			else if (guess == ranNum) {
+			if (guess == ranNum) {
 				SoundUtils.tone(261,120);
 				SoundUtils.tone(392,120);
 				SoundUtils.tone(523,120);
@@ -133,15 +124,30 @@ public class Game {
 			else if (guess < ranNum) {
 				SoundUtils.tone(261,200);
 				
-				System.out.println("\n" + guess + " is too low. Try again "
-						+ "or enter 0 to quit");
+				System.out.println("\n" + guess + " is too low."); 
+                credits -= wagerAmount;
+                
 			}
 			else if (guess > ranNum) {
 				SoundUtils.tone(523,200);
 
-				System.out.println("\n" + guess + " is too high. Try again "
-						+ "or enter 0 to quit");
+				System.out.println("\n" + guess + " is too high."); 
+                credits -= wagerAmount;
 			}
+            if (credits > 0 && !guessedIt) {
+                System.out.print("Enter amount of credits to wager or 0 to quit: ");
+                wagerAmount = keyboard.nextInt();
+            }
 		} 
+        if (wagerAmount == 0) {
+            quit = true;
+        }
+	}
+	public char playAgain() throws LineUnavailableException {
+		System.out.println();
+		System.out.println("Would you like to play again?");
+		System.out.print("y/n: ");
+
+		return keyboard.next().toLowerCase().charAt(0);
 	}
 }
