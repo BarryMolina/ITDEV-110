@@ -10,6 +10,7 @@ import javax.sound.sampled.LineUnavailableException;
 /**
  *
  * @author barrymolina
+ * Barry Molina, ITDEV-110-500, Assignment 8
  */
 public class HighLow2 {
 
@@ -20,6 +21,7 @@ public class HighLow2 {
 		Admin a = new Admin();
 		a.intro();
         Game g = new Game();
+		a.goodbye();
 	}
 	
 }
