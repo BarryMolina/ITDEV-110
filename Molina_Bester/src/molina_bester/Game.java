@@ -105,10 +105,10 @@ public class Game {
         }
         System.out.println("\n");
         if (computer.getTotal() > user.getTotal()) {
-            System.out.println(computer.getName() + "!!");
+            System.out.println(computer.getName() + "!!!");
         }
         else if (computer.getTotal() < user.getTotal()) {
-            System.out.println(user.getName() + "!!");
+            System.out.println(user.getName() + "!!!");
         }
         else {
             System.out.println("It's a tie!!!");

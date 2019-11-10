@@ -22,7 +22,7 @@ public class Dice {
     }
     public void rollDice() {
         for (int x = 0; x < values.length; x++) {
-            values[x] = p.nextInt(6 - 1) + 1;
+            values[x] = p.nextInt(6) + 1;
         }
     }
 }
