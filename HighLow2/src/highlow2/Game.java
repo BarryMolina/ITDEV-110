@@ -11,6 +11,7 @@ import javax.sound.sampled.LineUnavailableException;
 /**
  *
  * @author barrymolina
+ * Barry Molina, ITDEV-110-500, Assignment 7
  */
 public class Game {
 	
@@ -21,7 +22,6 @@ public class Game {
 	int high;
 	int ranNum;
 	int credits;
-    boolean guessedIt;
     boolean quit;
 
 
@@ -37,7 +37,6 @@ public class Game {
 	public void play() throws LineUnavailableException, InterruptedException {
 
         credits = 0;
-        guessedIt = false;
         quit = false;
         getLevel();
         getHigh();
@@ -45,15 +44,13 @@ public class Game {
             addCredits();
             getRandom();
             makeGuess();
+			System.out.println("You have a total of " + credits + " credits.");
         } while (credits > 0 && !quit); 
         if (credits <= 0) {
             System.out.println("You ran out of credits!");
         }
-        System.out.println("Game Over.");
+        System.out.println("\nGame Over.");
 	}
-	// gets level selected by user
-    public void newMatch() {
-    }
 	public void getLevel() {
 		boolean validLevel = false;
 		while (!validLevel) {
@@ -61,7 +58,7 @@ public class Game {
 			System.out.println("1. Easy");
 			System.out.println("2. Medium");
 			System.out.println("3. Hard");
-			System.out.print("(Digit from 1-3) >>> ");
+			System.out.print("(Digit from 1-3): ");
 			level = keyboard.nextInt();
 			if (level == 1 || level == 2 || level == 3) {
 				validLevel = true;
@@ -83,7 +80,7 @@ public class Game {
 	}
     public void addCredits() {
         credits += 20;
-		System.out.println("You have been awarded 20 credits.");
+		System.out.println("\nYou have been awarded 20 credits.");
 		System.out.println("You have a total of " + credits + " credits.");
 
     }
@@ -93,17 +90,35 @@ public class Game {
 
 		System.out.println("\nA random number between 1 and " + high + 
 				" has been selected! The match is ready to begin.");
+		//System.out.println(ranNum);
+	}
+	public int getWager() {
+		int wager;
+		System.out.print("\nEnter amount of credits to wager (at least 1) or 0 to quit: ");
+		wager = keyboard.nextInt();
+		while (wager < 0 || wager > credits) {
+			if (wager < 0) {
+				System.out.println("\nYou can't wager negative credits!");
+			}
+			else if (wager > credits) {
+				System.out.println("\nYou can't wager more credits than you have!");
+				System.out.println("You have " + credits + " credits.");
+			}
+			System.out.print("\nEnter amount of credits to wager (at least 1) or 0 to quit: ");
+			wager = keyboard.nextInt();
+		}
+		return wager;
 	}
 	public void makeGuess() throws LineUnavailableException, InterruptedException {
-        int wagerAmount = 0;
+        int wagerAmount;
 		int guess;
 		int guessCount = 0;
+		boolean guessedIt = false;
 
+		wagerAmount = getWager();
 
-        System.out.print("Enter amount of credits to wager or 0 to quit: ");
-        wagerAmount = keyboard.nextInt();
 		while (wagerAmount != 0 && !guessedIt && credits > 0) {
-            System.out.println("What is your guess?: ");
+            System.out.print("\nWhat is your guess?: ");
 			guess = keyboard.nextInt();
 
 			guessCount++;
@@ -135,8 +150,7 @@ public class Game {
                 credits -= wagerAmount;
 			}
             if (credits > 0 && !guessedIt) {
-                System.out.print("Enter amount of credits to wager or 0 to quit: ");
-                wagerAmount = keyboard.nextInt();
+				wagerAmount = getWager();
             }
 		} 
         if (wagerAmount == 0) {

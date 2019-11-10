@@ -10,6 +10,7 @@ import javax.sound.sampled.LineUnavailableException;
 /**
  *
  * @author barrymolina
+ * Barry Molina, ITDEV-110-500, Assignment 7
  */
 public class Admin {
 	
@@ -21,11 +22,11 @@ public class Admin {
 				+ "The computer will select a random number within the range\n"
 				+ "for that level (easy: 1-20, medium: 1-50, hard: 1-100).\n" );
 		System.out.println("At the beginning of each match, you will recieve 20 credits\n"
-				+ "that you may wager before each guess. If you guess correctly,\n"
-				+ "you win that many credits to use again in the next match.\n"
-				+ "If you lose, those credits are subtracted from\n"
-				+ "your total. If you have 0 credits or less you lose the game.\n");
-		System.out.println("Please note, each incorrect guess also costs 1 credit by default.");
+				+ "that you may wager before each guess. You must wager at least 1 credit. \n"
+				+ "If you guess wrong, those credits are subtracted from your total.\n"
+				+ "If you guess correctly, you may use your remaining credits\n"
+				+ "for the next match along with the default amount of credits\n"
+				+ "awarded every match. If you have 0 credits or less you lose the game.\n");
 	}
 
 	public void goodbye() throws LineUnavailableException {
