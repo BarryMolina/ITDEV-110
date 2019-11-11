@@ -33,9 +33,9 @@ public class Dice {
         for (int x = 0; x < values.length; x++) {
             values[x] = p.nextInt(numFaces) + 1;
         }
-        setRollTotal();
+        calcRollTotal();
     }
-    public void setRollTotal() {
+    public void calcRollTotal() {
         int total = 0;
         for (int i = 0; i < values.length; i++) {
             total += values[i];
