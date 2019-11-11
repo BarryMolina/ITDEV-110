@@ -14,15 +14,32 @@ import java.util.Random;
 public class Dice {
 
     Random p = new Random();
-    int NUM_DICE = 5;
-    int[] values = new int[NUM_DICE];
+    int numFaces;
+    int[] values;
+    int rollTotal;
     
+    public Dice(int dice, int faces) {
+        numFaces = faces;
+
+        values = new int[dice];
+    }
     public int[] getValues() {
         return values;
     }
+    public int getRollTotal() {
+        return rollTotal;
+    }
     public void rollDice() {
         for (int x = 0; x < values.length; x++) {
-            values[x] = p.nextInt(6 - 1) + 1;
+            values[x] = p.nextInt(numFaces) + 1;
         }
+        setRollTotal();
+    }
+    public void setRollTotal() {
+        int total = 0;
+        for (int i = 0; i < values.length; i++) {
+            total += values[i];
+        }
+        rollTotal = total;
     }
 }

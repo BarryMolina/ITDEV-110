@@ -14,25 +14,38 @@ import java.util.Scanner;
 public class Game {
 
     Scanner keyboard = new Scanner(System.in);
-    Dice d = new Dice(); 
-    Player computer = new Player("Computer");
+    Dice d;
+    Player computer;
     Player user; 
-    int ROUNDS = 5;
-    int VERY_SHORT = 1000; //1000
-    int SHORT = 1500; //1500
-    int MEDIUM = 2500; //2500
-    int LONG = 3000; //3000
-    int VERY_LONG = 4000; //4000
+
+    int numRounds;
+    int VERY_SHORT = 0; //1000
+    int SHORT = 0; //1500
+    int MEDIUM = 0; //2500
+    int LONG = 0; //3000
+    int VERY_LONG = 0; //4000
    
-    public Game() {
+    public Game(int rounds, int dice, int faces) {
         String name;
+        numRounds = rounds;
+
+        d = new Dice(dice, faces);
+
+        computer = new Player("Computer", numRounds, dice);
+
         System.out.print("What's your name? ");
         name = keyboard.nextLine();
-        user = new Player(name);
+        user = new Player(name, numRounds, dice);
     }
     public void play() throws InterruptedException {
 		char response; 
-        for (int round = 0; round < ROUNDS; round++) {
+        boolean quit = false;
+        int round = 0;
+
+        computer.resetScores();
+        user.resetScores();
+        
+        while (round < numRounds && quit == false) {
             System.out.println("\n");
             System.out.println("Round " + (round + 1));
             System.out.println("-------------------------------------");
@@ -45,17 +58,25 @@ public class Game {
             System.out.println(user.getName() + "'s turn.");
             Thread.sleep(MEDIUM);
             System.out.println();
-			System.out.print("Press r to roll: ");
+			System.out.print("Press 'r' to roll or 'q' to quit: ");
 			response = keyboard.nextLine().toUpperCase().charAt(0);
-			while (response != 'R') {
-				System.out.println("You must enter r to roll");
+			while (response != 'R' && response != 'Q') {
+				System.out.println("You must enter either 'r' to roll or 'q' to quit");
                 Thread.sleep(SHORT);
-                System.out.print("Press r to roll: ");
+                System.out.print("Press 'r' to roll or 'q' to quit: ");
                 response = keyboard.nextLine().toUpperCase().charAt(0);
 			}
-            turn(user, round);
+            if (response == 'R') {
+                turn(user, round);
+            }
+            else {
+                quit = true;
+            }
+            round++;
         }
-        matchResults();
+        if (quit == false) {
+            matchResults();
+        }
     }
     public void turn(Player p, int round) throws InterruptedException {
         int[] values;
@@ -76,7 +97,7 @@ public class Game {
         System.out.println();
         Thread.sleep(LONG);
         System.out.println();
-        System.out.println("Roll total: " + rollTotal(values));
+        System.out.println("Roll total: " + d.getRollTotal());
         p.setScores(round, values);
         Thread.sleep(MEDIUM);
         System.out.println();
@@ -85,16 +106,6 @@ public class Game {
         System.out.println(computer.getName() + ": " + computer.getTotal()
                     + "\n" + user.getName() + ": " + user.getTotal());
         Thread.sleep(VERY_LONG);
-        //System.out.println(p.getName() + "'s current total score: " +
-                //p.getTotal());
-
-    }
-    public int rollTotal(int[] values) {
-        int total = 0;
-        for (int i = 0; i < values.length; i++) {
-            total += values[i];
-        }
-        return total;
     }
     public void matchResults() throws InterruptedException {
         System.out.println();
@@ -114,4 +125,15 @@ public class Game {
             System.out.println("It's a tie!!!");
         }
     }
+	public char playAgain() {
+        char again;
+		System.out.println();
+		System.out.println("Would you like to play again?");
+		System.out.print("y/n: ");
+
+        again = keyboard.next().toLowerCase().charAt(0);
+        keyboard.nextLine();
+
+		return again;
+	}
 }
