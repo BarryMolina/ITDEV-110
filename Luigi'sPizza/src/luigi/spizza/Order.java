@@ -5,7 +5,6 @@
  */
 package luigi.spizza;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -22,17 +21,18 @@ public class Order {
 	double priceArray[] = {10.00, 12.00, 15.00};
     String toppingsArray[] = {"Pepperoni", "Sausage", "Onion", "Mushroom", "Anchovies"};
     final double EXTRA_TOPPING = 1.00;
-    String orderType;
     boolean delivery = false;
     final double DELIVERY_FEE = 2.00;
 	double orderTotal = 0;
     Scanner keyboard = new Scanner(System.in);
 	
 	public void takeOrder() {
-		//getInfo();
-		//getDelivery();
+		getInfo();
+		getDelivery();
 		getNumPizzas();
 		makePizzas();
+		reviewPizzas();
+		calculateOrder();
 		reviewOrder();
 	}
     public void getInfo() {
@@ -44,9 +44,10 @@ public class Order {
         phoneNumber = keyboard.nextLine();
     }
 	public void getDelivery() {
+		char orderType;
         System.out.print("Pickup or delivery?: ");
-        orderType = keyboard.nextLine();
-        if (orderType == "delivery")
+        orderType = keyboard.next().toLowerCase().charAt(0);
+        if (orderType == 'd')
             delivery = true;
 	}
 	public void getNumPizzas() {
@@ -109,16 +110,31 @@ public class Order {
 			System.out.print("y/n: ");
 			answer = keyboard.next().charAt(0);
 			if (answer == 'y') {
-				p.setTopping(topping);
-				if (p.getToppings().size() > 1) {
+				p.addTopping(topping);
+				if (p.getNumToppings() > 1) {
 					p.updatePrice(EXTRA_TOPPING);
 				}
 			}
 		}
-		p.toppingsToString();
     }
-	public void reviewOrder() {
+	public void reviewPizzas() {
 		for (int p = 0; p < pizzas.length; p++)
 			System.out.println(pizzas[p]);
+	}
+	public void calculateOrder() {
+		for (Pizza p : pizzas) {
+			orderTotal += p.getPrice();
+		}
+		if (delivery) {
+			orderTotal += DELIVERY_FEE;
+		}
+	}
+	public void reviewOrder() {
+
+		System.out.println("Order for:\n" + name + "\n" + address + "\n"
+				+ phoneNumber + "\n" + "Delivery: " + (delivery? "yes" : "no"));
+				
+		System.out.println("Order total: $" + orderTotal);
+		System.out.println("Thank you for eating with Luigi!");
 	}
 }

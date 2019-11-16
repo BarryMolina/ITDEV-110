@@ -5,7 +5,6 @@
  */
 package luigi.spizza;
 
-import java.util.ArrayList;
 
 /**
  *
@@ -13,27 +12,21 @@ import java.util.ArrayList;
  */
 public class Pizza {
         int pizzaNum;
-        ArrayList<String> toppings;
-		String toppingsString = "";
+		String toppings = "";
+		int numToppings = 0;
         char sizeChar;
         String sizeString;
 		double price = 0;
 
     public Pizza(int num) {
         pizzaNum = num;
-        toppings = new ArrayList<>();
     }
-
     public int getPizzaNum() {
         return pizzaNum;
     }
-    public char getSizeChar() {
-        return sizeChar;
-    }
-	public String getSizeString() {
+	public String getSize() {
 		return sizeString;
 	}
-
     public void setSize(char size) {
 		sizeChar = size;
 		switch (size){
@@ -45,26 +38,24 @@ public class Pizza {
 			break;
 		}
     }
-    public void setTopping(String topping) {
-        toppings.add(topping);
-    }
-
-    public ArrayList<String> getToppings() {
-        return toppings;
-    }
-	public void toppingsToString() {
-		for (String topping : toppings) {
-			toppingsString += topping + " ";
-		}
+	public int getNumToppings() {
+		return numToppings;
+	}
+	public void addTopping(String topping) {
+		toppings += topping + " ";
+		numToppings++;
 	}
 	public void updatePrice(double amount) {
 		price += amount;
+	}
+	public double getPrice() {
+		return price;
 	}
 	@Override
 	public String toString() {
 		return "Info for pizza number " + pizzaNum + ":" +
 				"\n\t Size: " + sizeString +
-				"\n\t Toppings: " + toppingsString +
+				"\n\t Toppings: " + toppings +
 				"\n\t Total price for this pizza: $" + price;
 	}
 }
