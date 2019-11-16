@@ -6,6 +6,7 @@
 package molina_bester;
 
 import java.util.Scanner;
+import javax.sound.sampled.LineUnavailableException;
 
 /**
  *
@@ -19,11 +20,11 @@ public class Game {
     Player user; 
 
     int numRounds;
-    int VERY_SHORT = 0; //1000
-    int SHORT = 0; //1500
-    int MEDIUM = 0; //2500
-    int LONG = 0; //3000
-    int VERY_LONG = 0; //4000
+    int VERY_SHORT = 1000; //1000
+    int SHORT = 1500; //1500
+    int MEDIUM = 2500; //2500
+    int LONG = 3000; //3000
+    int VERY_LONG = 4000; //4000
    
     public Game(int rounds, int dice, int faces) {
         String name;
@@ -33,11 +34,11 @@ public class Game {
 
         computer = new Player("Computer", numRounds, dice);
 
-        System.out.print("What's your name? ");
+        System.out.print("Enter your name: ");
         name = keyboard.nextLine();
         user = new Player(name, numRounds, dice);
     }
-    public void play() throws InterruptedException {
+    public void play() throws InterruptedException, LineUnavailableException {
 		char response; 
         boolean quit = false;
         int round = 0;
@@ -50,13 +51,13 @@ public class Game {
             System.out.println("Round " + (round + 1));
             System.out.println("-------------------------------------");
             System.out.println();
-            Thread.sleep(LONG);
+			SoundUtils.tone(392,150);
             System.out.println(computer.getName() + "'s turn.");
             Thread.sleep(MEDIUM);
             turn(computer, round);
             System.out.println();
+			SoundUtils.tone(523,150);
             System.out.println(user.getName() + "'s turn.");
-            Thread.sleep(MEDIUM);
             System.out.println();
 			System.out.print("Press 'r' to roll or 'q' to quit: ");
 			response = keyboard.nextLine().toUpperCase().charAt(0);
@@ -107,7 +108,7 @@ public class Game {
                     + "\n" + user.getName() + ": " + user.getTotal());
         Thread.sleep(VERY_LONG);
     }
-    public void matchResults() throws InterruptedException {
+    public void matchResults() throws InterruptedException, LineUnavailableException {
         System.out.println();
         System.out.print("And the winner is");
         for (int x = 0; x < 3; x++) {
@@ -117,12 +118,21 @@ public class Game {
         System.out.println("\n");
         if (computer.getTotal() > user.getTotal()) {
             System.out.println(computer.getName() + "!!");
-        }
+			SoundUtils.tone(523,150);
+			SoundUtils.tone(261,300);
+			}
         else if (computer.getTotal() < user.getTotal()) {
             System.out.println(user.getName() + "!!");
+			SoundUtils.tone(261,120);
+			SoundUtils.tone(392,120);
+			SoundUtils.tone(523,120);
+			Thread.sleep(60);
+			SoundUtils.tone(392,120);
+			SoundUtils.tone(523,200);
         }
         else {
             System.out.println("It's a tie!!!");
+			SoundUtils.tone(261,200);
         }
     }
 	public char playAgain() {

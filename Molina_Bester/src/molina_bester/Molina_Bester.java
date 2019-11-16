@@ -5,25 +5,32 @@
  */
 package molina_bester;
 
+import javax.sound.sampled.LineUnavailableException;
+
 /**
  *
  * @author barry
+ * Barry Molina, ITDEV-110-500, Assignment 8
  */
 public class Molina_Bester {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, LineUnavailableException {
         int ROUNDS = 5;
         int NUM_DICE = 5;
         int FACES_PER_DIE = 6;
 
-        Game game = new Game(ROUNDS, NUM_DICE, FACES_PER_DIE);
-        
+		Admin a = new Admin();
+        Game g;
+
+		a.intro();
+		g = new Game(ROUNDS, NUM_DICE, FACES_PER_DIE);
 		do  {
-            game.play();
-		} while (game.playAgain() == 'y');
+            g.play();
+		} while (g.playAgain() == 'y');
+		a.goodbye();
     }
     
 }
