@@ -5,16 +5,30 @@
  */
 package molina_finalproject;
 
+import java.util.Scanner;
+
 /**
  *
  * @author barry
  */
 public class GameController {
     
-    public GameController() {
-        Game g = new Game();
-        g.reset();
-        g.play();
+	Scanner keyboard = new Scanner(System.in);
+
+    public GameController() throws InterruptedException {
+		Game g;
+		do  {
+			g = new Game();
+            g.play();
+		} while (playAgain() == 'y');
 
     }
+	public char playAgain() {
+        char again;
+		System.out.print("Would you like to play again? (y/n):");
+        again = keyboard.next().toLowerCase().charAt(0);
+        keyboard.nextLine();
+
+		return again;
+	}
 }

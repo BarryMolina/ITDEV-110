@@ -7,8 +7,8 @@ package molina_finalproject;
 
 /**
  *
- * @author barry
+ * @author barrymolina
  */
-public class BoardUI {
-    
+class keyboard {
+	
 }
