@@ -32,6 +32,9 @@ public class Board {
         }
 		wc = new WinChecker(board);
 	}
+    public int[][] getBoard() {
+        return board;
+    }
     public void printBoard() {
         
         for (int row = 0; row < board.length; row++) {
@@ -47,9 +50,9 @@ public class Board {
 		}
 		System.out.println();
 		System.out.println();
-		wc.printBoard();
+		//wc.printBoard();
     }
-	public void drop(int pNum, int idx) throws InterruptedException {
+	public int drop(int pNum, int idx) throws InterruptedException {
 		int row = 0;
 		while (row < board.length && board[row][idx] == 0) {
 			board[row][idx] = pNum;
@@ -61,5 +64,6 @@ public class Board {
 			row++;
 			Thread.sleep(250);
 		}
+        return row - 1;
 	}
 }

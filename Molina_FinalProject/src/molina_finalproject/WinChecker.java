@@ -14,6 +14,7 @@ public class WinChecker {
 	int col;
 	int player;
 	int[][] board;
+    int CONNECT = 4;
 
 	public WinChecker(int[][] board) {
 		this.board = board;
@@ -21,9 +22,23 @@ public class WinChecker {
 	public boolean checkWin(int row, int col) {
 		this.row = row;
 		this.col = col;
+        boolean win = false;
 		player = board[row][col];
-		return false;
+        //if (down() || leftRight() || downDiag() || upDiag()) {
+        if (down()) { 
+            win = true;
+        }
+        return win;
 	}
+    public boolean down() {
+        int inRow = 1;
+        int r = row + 1;
+        while (r < board.length && board[r][col] == player) {
+            inRow++;
+            r++;
+        }
+        return (inRow >= CONNECT);
+    }
 
     public void printBoard() {
         

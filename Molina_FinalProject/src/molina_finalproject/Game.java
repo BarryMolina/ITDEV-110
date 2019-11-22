@@ -24,6 +24,7 @@ public class Game {
 	final int INVALID = -9;
 	boolean player1Quit = false;
 	boolean player2Quit = false;
+	WinChecker wc;
 
 	Scanner keyboard = new Scanner(System.in);
 
@@ -31,6 +32,7 @@ public class Game {
 		p1 = new Player(1, p1Token);
 		p2 = new Player(2, p2Token);
 		b = new Board(p1.getToken(), p2.getToken());
+        wc = new WinChecker(b.getBoard());
 	}
 
     public void play() throws InterruptedException {
@@ -51,6 +53,7 @@ public class Game {
 		System.out.println("Player " + p.getNum() + "'s turn.");
 		System.out.println();
 		int selectIdx;
+        int row;
 		boolean confirmed = false;
 		while (!p.getQuit() && !confirmed) {
 			selectIdx = makeSelection();
@@ -60,7 +63,10 @@ public class Game {
 			else {
 				confirmed = confirmSelection(p.getToken(), selectIdx);
 				if (confirmed) {
-					b.drop(p.getNum(), selectIdx);
+					row = b.drop(p.getNum(), selectIdx);
+                    if (wc.checkWin(row, selectIdx)) {
+                        System.out.println("You Win!");
+                    }
 				}
 			}
 		}
