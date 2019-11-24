@@ -54,22 +54,32 @@ public class Game {
 		System.out.println();
 		int selectIdx;
         int row;
-		boolean confirmed = false;
-		while (!p.getQuit() && !confirmed) {
-			selectIdx = makeSelection();
-			if (selectIdx == QUIT_NUM) {
-				p.setQuit();
-			}
-			else {
-				confirmed = confirmSelection(p.getToken(), selectIdx);
-				if (confirmed) {
-					row = b.drop(p.getNum(), selectIdx);
-                    if (wc.checkWin(row, selectIdx)) {
-                        System.out.println("You Win!");
-                    }
-				}
+		selectIdx = makeSelection();
+		if (selectIdx == QUIT_NUM) {
+			p.setQuit();
+		}
+		else {
+			row = b.drop(p.getNum(), selectIdx);
+			if (wc.checkWin(row, selectIdx)) {
+				System.out.println("You Win!");
 			}
 		}
+//		boolean confirmed = false;
+//		while (!p.getQuit() && !confirmed) {
+//			selectIdx = makeSelection();
+//			if (selectIdx == QUIT_NUM) {
+//				p.setQuit();
+//			}
+//			else {
+//				confirmed = confirmSelection(p.getToken(), selectIdx);
+//				if (confirmed) {
+//					row = b.drop(p.getNum(), selectIdx);
+//                    if (wc.checkWin(row, selectIdx)) {
+//                        System.out.println("You Win!");
+//                    }
+//				}
+//			}
+//		}
 	}
 	public int makeSelection() {
 		char select;
