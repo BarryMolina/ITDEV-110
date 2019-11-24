@@ -16,52 +16,52 @@ public class Game {
 	Board b;
 	Player p1;
 	Player p2;
-	final char p1Token = 'X';
-	final char p2Token = 'O';
+    final int PLAYER1_NUM = 1;
+    final int PLAYER2_NUM = 2;
+	final char PLAYER1_TOKEN = 'X';
+	final char PLAYER2_TOKEN = 'O';
 	final char[] COL_CHARS = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
 	final char QUIT = 'q';
 	final int QUIT_NUM = -1;
 	final int INVALID = -9;
-	boolean player1Quit = false;
-	boolean player2Quit = false;
+    int winner = 0;
 	WinChecker wc;
 
 	Scanner keyboard = new Scanner(System.in);
 
 	public Game() {
-		p1 = new Player(1, p1Token);
-		p2 = new Player(2, p2Token);
+		p1 = new Player(PLAYER1_NUM, PLAYER1_TOKEN);
+		p2 = new Player(PLAYER2_NUM, PLAYER2_TOKEN);
 		b = new Board(p1.getToken(), p2.getToken());
         wc = new WinChecker(b.getBoard());
 	}
 
     public void play() throws InterruptedException {
-		while (!p1.getQuit() && !p2.getQuit()) {
-			turn(p1);
-			if (!p1.getQuit()) {
-				turn(p2);
-			}
+        int current = p1.getNum();
+		while (winner == 0) {
+			turn(current);
+            current = otherPlayer(current);
 		}
-		if (p1.getQuit()) {
-			System.out.println("Player 2 Wins!");
-		}
-		else if (p2.getQuit()) {
+		if (winner == p1.getNum()) {
 			System.out.println("Player 1 Wins!");
 		}
+		else if (winner == p2.getNum()) {
+			System.out.println("Player 2 Wins!");
+		}
     }
-	public void turn(Player p) throws InterruptedException {
-		System.out.println("Player " + p.getNum() + "'s turn.");
+	public void turn(int player) throws InterruptedException {
+		System.out.println("Player " + player + "'s turn.");
 		System.out.println();
 		int selectIdx;
         int row;
 		selectIdx = makeSelection();
 		if (selectIdx == QUIT_NUM) {
-			p.setQuit();
+            winner = otherPlayer(player);
 		}
 		else {
-			row = b.drop(p.getNum(), selectIdx);
+			row = b.drop(player, selectIdx);
 			if (wc.checkWin(row, selectIdx)) {
-				System.out.println("You Win!");
+                winner = player;
 			}
 		}
 //		boolean confirmed = false;
@@ -138,5 +138,15 @@ public class Game {
     //public void updatePlayer2(int row, int col) {
         //board[row][col] = PLAYER2;
     //}
+    public int otherPlayer(int player) {
+        int other;
+        if (player == p1.getNum()) {
+            other = p2.getNum();
+        }
+        else {
+            other = p1.getNum();
+        }
+        return other;
+    }
     
 }
