@@ -15,6 +15,9 @@ public class WinChecker {
 	int player;
 	int[][] board;
     int CONNECT = 4;
+    int[] matchRows;
+    int[] matchCols;
+    int matchCount;
 
 	public WinChecker(int[][] board) {
 		this.board = board;
@@ -22,10 +25,16 @@ public class WinChecker {
 	public boolean checkWin(int row, int col) {
 		this.row = row;
 		this.col = col;
-        boolean win = false;
 		player = board[row][col];
+        matchRows = new int[CONNECT];
+        matchCols = new int[CONNECT];
+        matchRows[0] = row;
+        matchCols[0] = col;
+        matchCount = 1;
+
+        boolean win = false;
+
         if (down() || sideToSide() || downDiag() || upDiag()) {
-        //if (down()) { 
             win = true;
         }
         return win;
@@ -40,6 +49,7 @@ public class WinChecker {
 			//System.out.println("At least 4 spaces up");
 			while (r < board.length && board[r][col] == player) {
 				//System.out.println("found match at " + r + ", " + col);
+                addMatch(r, col);
 				inRow++;
 				r++;
 			}
@@ -180,6 +190,20 @@ public class WinChecker {
 		}
 		return matches;
 	}
+    public void addMatch(int r, int c) {
+        matchRows[matchCount] = r;
+        matchCols[matchCount] = c;
+
+        matchCount++;
+    }
+
+    public int[] getCols() {
+        return matchCols;
+    }
+
+    public int[] getRows() {
+        return matchRows;
+    }
 
     public void printBoard() {
         

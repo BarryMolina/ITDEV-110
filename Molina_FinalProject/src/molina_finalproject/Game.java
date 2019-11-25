@@ -49,19 +49,20 @@ public class Game {
 			System.out.println("Player 2 Wins!");
 		}
     }
-	public void turn(int player) throws InterruptedException {
-		System.out.println("Player " + player + "'s turn.");
+	public void turn(int playerNum) throws InterruptedException {
+		System.out.println("Player " + playerNum + "'s turn.");
 		System.out.println();
 		int selectIdx;
         int row;
 		selectIdx = makeSelection();
 		if (selectIdx == QUIT_NUM) {
-            winner = otherPlayer(player);
+            winner = otherPlayer(playerNum);
 		}
 		else {
-			row = b.drop(player, selectIdx);
+			row = b.drop(playerNum, selectIdx);
 			if (wc.checkWin(row, selectIdx)) {
-                winner = player;
+                b.flash(wc.getRows(), wc.getCols());
+                winner = playerNum;
 			}
 		}
 //		boolean confirmed = false;
@@ -138,9 +139,9 @@ public class Game {
     //public void updatePlayer2(int row, int col) {
         //board[row][col] = PLAYER2;
     //}
-    public int otherPlayer(int player) {
+    public int otherPlayer(int playerNum) {
         int other;
-        if (player == p1.getNum()) {
+        if (playerNum == p1.getNum()) {
             other = p2.getNum();
         }
         else {
