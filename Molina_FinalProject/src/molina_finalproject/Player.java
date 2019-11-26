@@ -13,8 +13,6 @@ public class Player {
 	
 	int playerNum;
 	char token;
-	boolean quit = false;
-    boolean winner = false;
 	
 	public Player(int playerNum, char token) {
 		this.token = token;
@@ -25,11 +23,5 @@ public class Player {
 	}
 	public char getToken() {
 		return token;
-	}
-	public boolean getQuit() {
-		return quit;
-	}
-	public void setQuit() {
-		quit = true;
 	}
 }

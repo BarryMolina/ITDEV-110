@@ -5,6 +5,8 @@
  */
 package molina_finalproject;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author barrymolina
@@ -15,9 +17,9 @@ public class WinChecker {
 	int player;
 	int[][] board;
     int CONNECT = 4;
-    int[] matchRows;
-    int[] matchCols;
-    int matchCount;
+	ArrayList<Integer> matchRows;
+    ArrayList<Integer> matchCols;
+    int matches;
 
 	public WinChecker(int[][] board) {
 		this.board = board;
@@ -26,11 +28,10 @@ public class WinChecker {
 		this.row = row;
 		this.col = col;
 		player = board[row][col];
-        matchRows = new int[CONNECT];
-        matchCols = new int[CONNECT];
-        matchRows[0] = row;
-        matchCols[0] = col;
-        matchCount = 1;
+        matchRows = new ArrayList<>();
+        matchCols = new ArrayList<>();
+		matches = 0;
+		addMatch(row, col);
 
         boolean win = false;
 
@@ -41,181 +42,118 @@ public class WinChecker {
 	}
 	//Checks for four in a row straight down.
     public boolean down() {
-		//System.out.println("Down is running");
-        int inRow = 1;
         int r = row + 1;
 		//Won't run if token isn't at least four spaces up
 		if (board.length - row >= CONNECT) {
-			//System.out.println("At least 4 spaces up");
 			while (r < board.length && board[r][col] == player) {
-				//System.out.println("found match at " + r + ", " + col);
                 addMatch(r, col);
-				inRow++;
 				r++;
 			}
 		}
-        return (inRow >= CONNECT);
+        return (matches >= CONNECT);
     }
 	public boolean sideToSide() {
-		//System.out.println("sideToSide start");
-		int inRow = 1;
+		resetMatches();
 		if (col > 0) {
-			//System.out.println("checking left");
-			inRow += left();
+			left();
 		}
-		if (col < board[row].length -1 && inRow < CONNECT) {
-			//System.out.println("checking right");
-			inRow += right();
+		if (col < board[row].length -1) {
+			right();
 		}
-		return inRow >= CONNECT;
+		return matches >= CONNECT;
 	}
-	public int left() {
-		int matches = 0;
+	public void left() {
 		int c = col - 1;
-		while (c >= 0 && board[row][c] == player && matches < CONNECT) {
-			//System.out.println("found match at " + row + ", " + c);
-			//if (board[row][c] == player ) {
-				//matches++;
-			//}
-			matches++;
+		while (c >= 0 && board[row][c] == player) {
+			addMatch(row, c);
 			c--;
 		}
-		return matches;
 	}
-	public int right() {
-		int matches = 0;
+	public void right() {
 		int c = col + 1;
-		while (c < board[row].length && board[row][c] == player && matches < CONNECT) {
-			//System.out.println("found match at " + row + ", " + c);
-			//if (board[row][c] == player ) {
-				//matches++;
-			//}
-			matches++;
+		while (c < board[row].length && board[row][c] == player) {
+			addMatch(row, c);
 			c++;
 		}
-		return matches;
 	}
 	public boolean upDiag() {
-		//System.out.println("upDiag()");
-		int inRow = 1;
+		resetMatches();
 		if ((col <= -row + 8) && (col >= -row +3)) {
-			//System.out.println("Within bounds");
 			if (row < board.length - 1) {
-				//System.out.println("leftDown()");
-				inRow += leftDown();
+				leftDown();
 			}
-			if (row > 0 && inRow < CONNECT) {
-				//System.out.println("rightUp()");
-				inRow += rightUp();
+			if (row > 0) {
+				rightUp();
 			}
 		}
-		return inRow >= CONNECT;
+		return matches >= CONNECT;
 	}
-	public int leftDown() {
-		int matches = 0;
+	public void leftDown() {
 		int r = row + 1;
 		int c = col - 1;
-		while (r < board.length && c >= 0 && board[r][c] == player && matches < CONNECT) {
-			//System.out.println("found match at " + r + ", " + c);
-			//if (board[r][c] == player) {
-				//matches++;
-			//}
-			matches++;
+		while (r < board.length && c >= 0 && board[r][c] == player) {
+			addMatch(r, c);
 			r++;
 			c--;
 		}
-		return matches;
 	}
-	public int rightUp() {
-		int matches = 0;
+	public void rightUp() {
 		int r = row - 1;
 		int c = col + 1;
-		while (r >= 0 && c < board[r].length && board[r][c] == player && matches < CONNECT) {
-			//System.out.println("found match at " + r + ", " + c);
-			//if (board[r][c] == player) {
-				//System.out.println("found match");
-				//matches++;
-			//}
-			matches++;
+		while (r >= 0 && c < board[r].length && board[r][c] == player) {
+			addMatch(r, c);
 			r--;
 			c++;
 		}
-		return matches;
 	}
 	public boolean downDiag() {
-		int inRow = 1;
-		//System.out.println("downDiag()");
+		resetMatches();
 		if ((col <= row + 3) && (col >= row - 2)) {
-			//System.out.println("Within bounds");
 			if (row > 0) {
-				//System.out.println("leftUp()");
-				inRow += leftUp();
+				leftUp();
 			}
-			if (row < board.length -1 && inRow < CONNECT) {
-				//System.out.println("rightDown()");
-				inRow += rightDown();
+			if (row < board.length -1) {
+				rightDown();
 			}
 		}
-		return inRow >= CONNECT;
+		return matches >= CONNECT;
 	}
-	public int leftUp() {
-		int matches = 0;
+	public void leftUp() {
 		int r = row - 1;
 		int c = col - 1;
-		while (r >= 0 && c >= 0 && board[r][c] == player && matches < CONNECT) {
-			//System.out.println("found match at " + r + ", " + c);
-			//if (board[r][c] == player) {
-				//System.out.println("found match");
-				//matches++;
-			//}
-			matches++;
+		while (r >= 0 && c >= 0 && board[r][c] == player) {
+			addMatch(r, c);
 			r--;
 			c--;
 		}
-		return matches;
 	}
-	public int rightDown() {
-		int matches = 0;
+	public void rightDown() {
 		int r = row + 1;
 		int c = col + 1;
-		while (r < board.length && c < board[r].length && board[r][c] == player && matches < CONNECT) {
-			//System.out.println("found match at " + r + ", " + c);
-			//if (board[r][c] == player) {
-				//System.out.println("found match");
-				//matches++;
-			//}
-			matches++;
+		while (r < board.length && c < board[r].length && board[r][c] == player) {
+			addMatch(r, c);
 			r++;
 			c++;
 		}
-		return matches;
 	}
     public void addMatch(int r, int c) {
-        matchRows[matchCount] = r;
-        matchCols[matchCount] = c;
+		matchRows.add(r);
+		matchCols.add(c);
 
-        matchCount++;
+        matches++;
     }
+	public void resetMatches() {
+		matchRows.subList(1, matchRows.size()).clear();
+		matchCols.subList(1, matchCols.size()).clear();
 
-    public int[] getCols() {
+		matches = 1;
+	}
+
+    public ArrayList<Integer> getCols() {
         return matchCols;
     }
 
-    public int[] getRows() {
+    public ArrayList<Integer> getRows() {
         return matchRows;
     }
-
-    public void printBoard() {
-        
-        for (int r = 0; r < board.length; r++) {
-
-            for (int c = 0; c < board[r].length; c++) {
-                System.out.print(board[r][c]);
-            }
-            System.out.print("\n");
-        }
-		System.out.println();
-    }
-			
-	
 }

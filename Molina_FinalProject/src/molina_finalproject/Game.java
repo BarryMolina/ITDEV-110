@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class Game {
 
 	Board b;
+	WinChecker wc;
 	Player p1;
 	Player p2;
     final int PLAYER1_NUM = 1;
@@ -25,7 +26,6 @@ public class Game {
 	final int QUIT_NUM = -1;
 	final int INVALID = -9;
     int winner = 0;
-	WinChecker wc;
 
 	Scanner keyboard = new Scanner(System.in);
 
@@ -65,22 +65,6 @@ public class Game {
                 winner = playerNum;
 			}
 		}
-//		boolean confirmed = false;
-//		while (!p.getQuit() && !confirmed) {
-//			selectIdx = makeSelection();
-//			if (selectIdx == QUIT_NUM) {
-//				p.setQuit();
-//			}
-//			else {
-//				confirmed = confirmSelection(p.getToken(), selectIdx);
-//				if (confirmed) {
-//					row = b.drop(p.getNum(), selectIdx);
-//                    if (wc.checkWin(row, selectIdx)) {
-//                        System.out.println("You Win!");
-//                    }
-//				}
-//			}
-//		}
 	}
 	public int makeSelection() {
 		char select;
@@ -117,28 +101,6 @@ public class Game {
 		}
 		return index;
 	}
-	public boolean confirmSelection(char token, int selectIdx) {
-		boolean confirm = false;
-		char answer;
-		System.out.print(" ");
-		for (int x = 0; x < selectIdx; x++) {
-			System.out.print("  ");
-		}
-		System.out.println(token);
-		b.printBoard();
-		System.out.print("Drop token here? (y/n): ");
-		answer = keyboard.next().toLowerCase().charAt(0);
-		if (answer == 'y') {
-			confirm = true;
-		}
-		return confirm;
-	}
-    //public void updatePlayer1(int row, int col) {
-        //board[row][col] = PLAYER1;
-    //}
-    //public void updatePlayer2(int row, int col) {
-        //board[row][col] = PLAYER2;
-    //}
     public int otherPlayer(int playerNum) {
         int other;
         if (playerNum == p1.getNum()) {
