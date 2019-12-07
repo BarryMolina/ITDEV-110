@@ -17,6 +17,7 @@ public class Game {
 	WinChecker wc;
 	Player p1;
 	Player p2;
+	WinBanner wb;
     final int PLAYER1_NUM = 1;
     final int PLAYER2_NUM = 2;
 	final char PLAYER1_TOKEN = 'X';
@@ -25,6 +26,7 @@ public class Game {
 	final char QUIT = 'q';
 	final int QUIT_NUM = -1;
 	final int INVALID = -9;
+	final int FULL = -99;
     int winner = 0;
 
 	Scanner keyboard = new Scanner(System.in);
@@ -42,12 +44,9 @@ public class Game {
 			turn(current);
             current = otherPlayer(current);
 		}
-		if (winner == p1.getNum()) {
-			System.out.println("Player 1 Wins!");
-		}
-		else if (winner == p2.getNum()) {
-			System.out.println("Player 2 Wins!");
-		}
+//		wb = new WinBanner(winner);
+//		wb.displayWinner();
+		System.out.println("Player " + winner + " Wins!\n");
     }
 	public void turn(int playerNum) throws InterruptedException {
 		System.out.println("Player " + playerNum + "'s turn.");
@@ -73,9 +72,14 @@ public class Game {
 		System.out.print("Pick a column (a-g) or enter 'q' to quit: ");
 		select = keyboard.next().toLowerCase().charAt(0);
 		selectIdx = getIndex(select);
-		while (selectIdx == INVALID) {
+		while (selectIdx == INVALID || selectIdx == FULL) {
 			b.printBoard();
-			System.out.println("Invalid selection.\n");
+			if (selectIdx == INVALID) {
+				System.out.println("Invalid selection.\n");
+			}
+			else {
+				System.out.println("That column is full!\n");
+			}
 			System.out.print("Pick a column (a-g) or enter 'q' to quit: ");
 			select = keyboard.next().toLowerCase().charAt(0);
 			selectIdx = getIndex(select);
@@ -95,6 +99,9 @@ public class Game {
 				if (selection == COL_CHARS[i]) {
 					valid = true;
 					index = i;
+					if (b.getFirstRow()[index] != 0) {
+						index = FULL;
+					}
 				}
 				i++;
 			}

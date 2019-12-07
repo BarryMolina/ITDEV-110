@@ -37,6 +37,9 @@ public class Board {
     public int[][] getBoard() {
         return board;
     }
+	public int[] getFirstRow() {
+		return board[0];
+	}
     public void printBoard() {
         
         for (int row = 0; row < board.length; row++) {
