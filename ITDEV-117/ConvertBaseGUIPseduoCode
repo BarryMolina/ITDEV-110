@@ -1,0 +1,335 @@
+public class ConvertBase extends Application{
+    //declarations
+        private Stage stage
+        private Scene scene1
+        private Scene scene2
+
+        private TextField numberTextField
+        private TextField base1TextField
+        private TextField base2TextField
+
+        private final RadioButton binaryButton1 = RadioButton("Binary")
+        private final RadioButton ternaryButton1 = RadioButton("Ternary")
+        private final RadioButton octalButton1 = RadioButton("Octal")
+        private final RadioButton decimalButton1 = RadioButton("Decimal")
+        private final RadioButton hexadecimalButton1 = RadioButton("Hexadecimal")
+        private final RadioButton otherButton1 = RadioButton("Other")
+        private final RadioButton binaryButton2 = RadioButton("Binary")
+        private final RadioButton ternaryButton2 = RadioButton("Ternary")
+        private final RadioButton octalButton2 = RadioButton("Octal")
+        private final RadioButton decimalButton2 = RadioButton("Decimal")
+        private final RadioButton hexadecimalButton2 = RadioButton("Hexadecimal")
+        private final RadioButton otherButton2 = RadioButton("Other")
+
+        private Label errorLabel
+        private Label baseLabel1
+        private Label baseLabel2
+        private Label numberLabel
+        private Label resultLabel
+
+        ToggleGroup radioGroup1
+        ToggleGroup radioGroup2
+
+        RadioButton[] radioArray1 = {binaryButton1, ternaryButton1, octalButton1, decimalButton1,
+                                hexadecimalButton1}
+        RadioButton[] radioArray2 = {binaryButton2, ternaryButton2, octalButton2, decimalButton2,
+                                hexadecimalButton2}
+
+        num[] radioBaseValues = {2, 3, 8, 10, 16}
+        num[] values
+
+        string number
+        string newNumber
+
+        num startBase
+        num endBase
+
+        final num NO_BASE = -1
+        final num INVALID_BASE = -9
+        final num TOO_LOW = -99
+    
+    public static void main(string[] args) 
+        launch(args)
+    return
+
+    @Override
+    public void start(Stage primaryStage) 
+        stage = primaryStage
+        scene1 = inputScene()
+        scene2 = outputScene()
+
+        primaryStage.setScene(scene1)
+        primaryStage.setTitle("Base Converter")
+        primaryStage.setMinWidth(420)
+
+        primaryStage.show()
+    return
+
+    public Scene inputScene() 
+        //declarations
+            numberTextField = TextField()
+            base1TextField = TextField()
+            base2TextField = TextField()
+            radioGroup1 = ToggleGroup()
+            radioGroup2 = ToggleGroup()
+            errorLabel = Label()
+
+            Button calcButton = Button("Convert")
+            Button resetButton = Button("Reset")
+            Label promptLabel = Label("Enter a Number:")
+            Label convertFromLabel = Label("Base to Convert From:")
+            Label convertToLabel = Label("Base to Convert To:")
+            Label otherBase1Label = Label("Enter other base (1-16):")
+            Label otherBase2Label = Label("Enter other base (1-16):")
+
+            HBox promptHBox = HBox(10, promptLabel, numberTextField)
+            HBox otherBase1Box = HBox(10, otherBase1Label, base1TextField)
+            HBox otherBase2Box = HBox(10, otherBase2Label, base2TextField)
+            VBox radioVBox1 = VBox(5, convertFromLabel, binaryButton1, ternaryButton1, octalButton1,
+                                        decimalButton1, hexadecimalButton1, otherButton1,
+                                        otherBase1Box)
+            VBox radioVBox2 = VBox(5, convertToLabel, binaryButton2, ternaryButton2, octalButton2,
+                                        decimalButton2, hexadecimalButton2, otherButton2,
+                                        otherBase2Box)
+            HBox radioBoxes = HBox(0, radioVBox1, radioVBox2)
+            HBox buttonsBox = HBox(25, resetButton, calcButton)
+            VBox mainVBox = VBox(20, promptHBox, radioBoxes, errorLabel, buttonsBox)
+
+        binaryButton1.setToggleGroup(radioGroup1)
+        ternaryButton1.setToggleGroup(radioGroup1)
+        octalButton1.setToggleGroup(radioGroup1)
+        decimalButton1.setToggleGroup(radioGroup1)
+        hexadecimalButton1.setToggleGroup(radioGroup1)
+        otherButton1.setToggleGroup(radioGroup1)
+
+        binaryButton2.setToggleGroup(radioGroup2)
+        ternaryButton2.setToggleGroup(radioGroup2)
+        octalButton2.setToggleGroup(radioGroup2)
+        decimalButton2.setToggleGroup(radioGroup2)
+        hexadecimalButton2.setToggleGroup(radioGroup2)
+        otherButton2.setToggleGroup(radioGroup2)
+
+        base1TextField.setPrefWidth(40)
+        base2TextField.setPrefWidth(40)
+
+        radioVBox1.setMinWidth(200)
+        radioVBox2.setMinWidth(200)
+
+        buttonsBox.setAlignment(Pos.CENTER)
+        mainVBox.setAlignment(Pos.CENTER)
+        mainVBox.setPadding(Insets(10))
+
+        numberTextField.textProperty().addListener(textFieldListener())
+        otherBase1Box.visibleProperty().bind(otherButton1.selectedProperty())
+        otherBase2Box.visibleProperty().bind(otherButton2.selectedProperty())
+
+        calcButton.setOnAction(CalcButtonHandler())
+        resetButton.setOnAction(resetButtonHandler())
+
+    return Scene(mainVBox)
+
+    public Scene outputScene() 
+        //declarations
+            baseLabel1 = Label()
+            baseLabel2 = Label()
+            numberLabel = Label()
+            resultLabel = Label()
+
+            Button againButton = Button("Convert Again")
+            Button quitButton = Button("Quit")
+
+            HBox baseBox = HBox(20, baseLabel1, baseLabel2)
+            HBox numberBox = HBox(20, numberLabel, resultLabel)
+            HBox buttonBox = HBox(20, againButton, quitButton)
+            VBox mainVBox = VBox(10, baseBox, numberBox, buttonBox)
+
+        againButton.setOnAction(convertAgainHandler())
+        quitButton.setOnAction(quitHandler())
+
+        baseBox.setAlignment(Pos.CENTER)
+        numberBox.setAlignment(Pos.CENTER)
+        buttonBox.setAlignment(Pos.CENTER)
+        mainVBox.setPadding(Insets(10))
+
+    return Scene(mainVBox)
+
+    private class textFieldListener implements ChangeListener<string> 
+        @Override
+        public void changed(ObservableValue< ? extends string> observable, string oldValue, string newValue) 
+            char[] validChars = Converter.allChars
+            num highestNum = 0
+            num x = 0
+            num i
+            boolean foundIt
+            boolean invalidChar = false
+            values = num[newValue.length()]
+
+            errorLabel.setText(null)
+            disableAll(false)
+
+            while (!invalidChar && x < newValue.length()) 
+                i = 0
+                foundIt = false
+                while (!foundIt && i < validChars.length) 
+                    if (Character.toUpperCase(newValue.charAt(x)) == validChars[i]) 
+                        foundIt = true
+                        values[x] = i
+                        if (i > highestNum) 
+                            highestNum = i
+                            disableButtons(highestNum)
+                        endIf
+                    endif
+                    i++
+                endWhile
+                if (!foundIt) 
+                    invalidChar = true
+                    errorLabel.setText("You must enter an number or letter A-F")
+                    disableAll(true)
+                endif
+                x++
+            endWhile
+        return
+    endClass
+
+    public void disableButtons(num highestNum) 
+        num x = 0
+        boolean validButton = false
+        while (!validButton && x < radioBaseValues.length) 
+            if (radioBaseValues[x] <= highestNum) 
+                radioArray1[x].setSelected(false)
+                radioArray1[x].setDisable(true)
+            else 
+                validButton = true
+            endif
+            x++
+        endWhile
+    return
+
+    public void resetControls() 
+        radioGroup1.selectToggle(null)
+        radioGroup2.selectToggle(null)
+        numberTextField.clear()
+        base1TextField.clear()
+        base2TextField.clear()
+        errorLabel.setText("")
+    return
+
+    public void disableAll(boolean truthValue) 
+        radioGroup1.getToggles().forEach(toggle -> 
+            Node node = (Node) toggle 
+            node.setDisable(truthValue))
+    return
+
+    public class resetButtonHandler implements EventHandler<ActionEvent> 
+        @Override
+        public void handle(ActionEvent event) 
+            resetControls()
+        return
+    endClass
+    
+    public class CalcButtonHandler implements EventHandler<ActionEvent> 
+        @Override
+        public void handle(ActionEvent event) 
+            Converter c
+
+            if (numberTextField.getText().isEmpty()) 
+                errorLabel.setText("You must enter a number to convert")
+            else if (getStartBase() == NO_BASE || getEndBase() == NO_BASE) 
+                errorLabel.setText("Enter a base to convert from and a base to convert from")
+            else if (startBase == INVALID_BASE || endBase == INVALID_BASE) 
+                errorLabel.setText("Invalid base")
+            else if (startBase == TOO_LOW) 
+                errorLabel.setText("Start Base too low.")
+            else 
+                number = numberTextField.getText().toUpperCase()
+                c = Converter(startBase, endBase, number)
+                c.convert()
+                
+                newNumber = c.getNewNumber()
+                baseLabel1.setText("Start Base: " + startBase)
+                baseLabel2.setText("End Base: " + endBase)
+                numberLabel.setText("Number Converted: " + number)
+                resultLabel.setText("Result: " + newNumber)
+                stage.setScene(scene2)
+
+                stage.setTitle("Result")
+            endif
+        return
+    endClass
+
+    public class convertAgainHandler implements EventHandler<ActionEvent> 
+        @Override
+        public void handle(ActionEvent event) 
+            resetControls()
+            stage.setScene(scene1)
+        return
+    endClass
+
+    public class quitHandler implements EventHandler<ActionEvent> 
+        @Override
+        public void handle(ActionEvent event) 
+            System.exit(0)
+        return
+    endClass
+
+    public num getStartBase() 
+        startBase = getRadioBase(radioArray1)
+        if (startBase == NO_BASE && !base1TextField.getText().isEmpty()) 
+            try 
+                startBase = Integer.parseInt(base1TextField.getText())
+                validateStartBase()
+            endTry
+            catch(NumberFormatException e) 
+                startBase = INVALID_BASE
+            endCatch
+        endif
+    return startBase
+
+    public num getEndBase() 
+        endBase = getRadioBase(radioArray2)
+        if (endBase == NO_BASE && !base2TextField.getText().isEmpty()) 
+            try 
+                endBase = Integer.parseInt(base2TextField.getText())
+                validateEndBase()
+            endTry
+            catch(NumberFormatException e) 
+                endBase = INVALID_BASE
+            endCatch
+        endIf
+    return endBase
+
+    public num getRadioBase(RadioButton[] arr) 
+        num x = 0
+        boolean foundIt = false
+        num baseValue = NO_BASE
+
+        while (!foundIt && x < arr.length) 
+            if (arr[x].isSelected()) 
+                foundIt = true
+                baseValue = radioBaseValues[x]
+            endif
+            x++
+        endWhile
+    return baseValue
+
+    public void validateStartBase() 
+        num x = 0
+        if (startBase < 1 || startBase > 16) 
+            startBase = INVALID_BASE
+        else 
+            while (x < values.length && startBase != TOO_LOW) 
+                if (startBase <= values[x]) 
+                    startBase = TOO_LOW
+                endif
+            endWhile
+        endif
+    return
+
+    public void validateEndBase() 
+        if (endBase < 1 || endBase > 16) 
+            endBase = INVALID_BASE
+        endif
+    return
+endClass
+    
+

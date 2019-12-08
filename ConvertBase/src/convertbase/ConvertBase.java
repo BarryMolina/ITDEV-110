@@ -33,9 +33,7 @@ public class ConvertBase extends Application{
 	private TextField numberTextField;
 	private TextField base1TextField;
 	private TextField base2TextField;
-	private Label resultLabel;
 	private Label errorLabel;
-	//private RadioButton binaryButton1;
 	private final RadioButton binaryButton1 = new RadioButton("Binary");
 	private final RadioButton ternaryButton1 = new RadioButton("Ternary");
 	private final RadioButton octalButton1 = new RadioButton("Octal");
@@ -48,6 +46,12 @@ public class ConvertBase extends Application{
 	private final RadioButton decimalButton2 = new RadioButton("Decimal");
 	private final RadioButton hexadecimalButton2 = new RadioButton("Hexadecimal");
 	private final RadioButton otherButton2 = new RadioButton("Other");
+	private Label baseLabel1;
+	private Label baseLabel2;
+	private Label numberLabel;
+	private Label resultLabel;
+	String number;
+	String newNumber;
 	ToggleGroup radioGroup1;
 	ToggleGroup radioGroup2;
 	RadioButton[] radioArray1 = {binaryButton1, ternaryButton1, octalButton1, decimalButton1,
@@ -55,9 +59,12 @@ public class ConvertBase extends Application{
 	RadioButton[] radioArray2 = {binaryButton2, ternaryButton2, octalButton2, decimalButton2,
 							hexadecimalButton2};
 	int[] radioBaseValues = {2, 3, 8, 10, 16};
-	final int INVALID_BASE = -1;
+	final int NO_BASE = -1;
+	final int INVALID_BASE = -9;
+	final int TOO_LOW = -99;
 	int startBase;
 	int endBase;
+	int[] values;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -69,36 +76,41 @@ public class ConvertBase extends Application{
 		scene2 = outputScene();
 
 		primaryStage.setScene(scene1);
-
 		primaryStage.setTitle("Base Converter");
-
 		primaryStage.setMinWidth(420);
 
 		primaryStage.show();
 	}
 	public Scene inputScene() {
-		Button calcButton = new Button("Convert");
-		Button resetButton = new Button("Reset");
+		//declarations
+			numberTextField = new TextField();
+			base1TextField= new TextField();
+			base2TextField= new TextField();
+			radioGroup1 =  new ToggleGroup();
+			radioGroup2 = new ToggleGroup();
+			errorLabel = new Label();
 
-		Label promptLabel = new Label("Enter a Number:");
+			Button calcButton = new Button("Convert");
+			Button resetButton = new Button("Reset");
+			Label promptLabel = new Label("Enter a Number:");
+			Label convertFromLabel = new Label("Base to Convert From:");
+			Label convertToLabel = new Label("Base to Convert To:");
+			Label otherBase1Label = new Label("Enter other base (1-16):");
+			Label otherBase2Label = new Label("Enter other base (1-16):");
 
-		numberTextField = new TextField();
-		numberTextField.textProperty().addListener(new textFieldListener());
+			HBox promptHBox = new HBox(10, promptLabel, numberTextField);
+			HBox otherBase1Box = new HBox(10, otherBase1Label, base1TextField);
+			HBox otherBase2Box = new HBox(10, otherBase2Label, base2TextField);
+			VBox radioVBox1 = new VBox(5, convertFromLabel, binaryButton1, ternaryButton1, octalButton1,
+										decimalButton1, hexadecimalButton1, otherButton1,
+										otherBase1Box);
+			VBox radioVBox2 = new VBox(5, convertToLabel, binaryButton2, ternaryButton2, octalButton2,
+										decimalButton2, hexadecimalButton2, otherButton2,
+										otherBase2Box);
+			HBox radioBoxes = new HBox(0, radioVBox1, radioVBox2);
+			HBox buttonsBox = new HBox(25, resetButton, calcButton);
+			VBox mainVBox = new VBox(20, promptHBox, radioBoxes, errorLabel, buttonsBox);
 
-		errorLabel = new Label();
-
-		calcButton.setOnAction(new CalcButtonHandler());
-		resetButton.setOnAction(new resetButtonHandler());
-
-		Label convertFromLabel = new Label("Base to Convert From:");
-		//binaryButton1 = new RadioButton("Binary");
-		Label otherBase1Label = new Label("Enter other base (1-16):");
-		base1TextField= new TextField();
-		base1TextField.setPrefWidth(40);
-
-		//decimalButton1.setSelected(true);
-
-		radioGroup1 =  new ToggleGroup();
 		binaryButton1.setToggleGroup(radioGroup1);
 		ternaryButton1.setToggleGroup(radioGroup1);
 		octalButton1.setToggleGroup(radioGroup1);
@@ -106,14 +118,6 @@ public class ConvertBase extends Application{
 		hexadecimalButton1.setToggleGroup(radioGroup1);
 		otherButton1.setToggleGroup(radioGroup1);
 
-		Label convertToLabel = new Label("Base to Convert To:");
-		Label otherBase2Label = new Label("Enter other base (1-16):");
-		base2TextField= new TextField();
-		base2TextField.setPrefWidth(40);
-
-		//decimalButton2.setSelected(true);
-
-		radioGroup2 = new ToggleGroup();
 		binaryButton2.setToggleGroup(radioGroup2);
 		ternaryButton2.setToggleGroup(radioGroup2);
 		octalButton2.setToggleGroup(radioGroup2);
@@ -121,51 +125,46 @@ public class ConvertBase extends Application{
 		hexadecimalButton2.setToggleGroup(radioGroup2);
 		otherButton2.setToggleGroup(radioGroup2);
 
+		base1TextField.setPrefWidth(40);
+		base2TextField.setPrefWidth(40);
 
-
-
-
-		HBox promptHBox = new HBox(10, promptLabel, numberTextField);
-
-		HBox otherBase1Box = new HBox(10, otherBase1Label, base1TextField);
-		otherBase1Box.visibleProperty().bind(otherButton1.selectedProperty());
-		otherBase1Box.managedProperty().bind(otherButton1.selectedProperty());
-		
-		VBox radioVBox1 = new VBox(5, convertFromLabel, binaryButton1, ternaryButton1, octalButton1,
-									decimalButton1, hexadecimalButton1, otherButton1,
-									otherBase1Box);
 		radioVBox1.setMinWidth(200);
-
-		HBox otherBase2Box = new HBox(10, otherBase2Label, base2TextField);
-		otherBase2Box.visibleProperty().bind(otherButton2.selectedProperty());
-		otherBase2Box.managedProperty().bind(otherButton2.selectedProperty());
-
-		VBox radioVBox2 = new VBox(5, convertToLabel, binaryButton2, ternaryButton2, octalButton2,
-									decimalButton2, hexadecimalButton2, otherButton2,
-									otherBase2Box);
 		radioVBox2.setMinWidth(200);
 
-		HBox radioBoxes = new HBox(0, radioVBox1, radioVBox2);
-
-		HBox buttonsBox = new HBox(25, resetButton, calcButton);
 		buttonsBox.setAlignment(Pos.CENTER);
-
-		VBox mainVBox = new VBox(20, promptHBox, radioBoxes, errorLabel, buttonsBox);
-
 		mainVBox.setAlignment(Pos.CENTER);
-
 		mainVBox.setPadding(new Insets(10));
+
+		numberTextField.textProperty().addListener(new textFieldListener());
+		otherBase1Box.visibleProperty().bind(otherButton1.selectedProperty());
+		otherBase2Box.visibleProperty().bind(otherButton2.selectedProperty());
+
+		calcButton.setOnAction(new CalcButtonHandler());
+		resetButton.setOnAction(new resetButtonHandler());
 
 		return new Scene(mainVBox);
 	}
 	public Scene outputScene() {
-		resultLabel = new Label();
-		Button convertAgain = new Button("Convert Again");
+		//declarations
+			baseLabel1 = new Label();
+			baseLabel2 = new Label();
+			numberLabel = new Label();
+			resultLabel = new Label();
 
-		convertAgain.setOnAction(new convertAgainHandler());
+			Button againButton = new Button("Convert Again");
+			Button quitButton = new Button("Quit");
 
-		VBox mainVBox = new VBox(10, resultLabel, convertAgain);
-		mainVBox.setAlignment(Pos.CENTER);
+			HBox baseBox = new HBox(20, baseLabel1, baseLabel2);
+			HBox numberBox = new HBox(20, numberLabel, resultLabel);
+			HBox buttonBox = new HBox(20, againButton, quitButton);
+			VBox mainVBox = new VBox(10, baseBox, numberBox, buttonBox);
+
+		againButton.setOnAction(new convertAgainHandler());
+		quitButton.setOnAction(new quitHandler());
+
+		baseBox.setAlignment(Pos.CENTER);
+		numberBox.setAlignment(Pos.CENTER);
+		buttonBox.setAlignment(Pos.CENTER);
 		mainVBox.setPadding(new Insets(10));
 
 		return new Scene(mainVBox);
@@ -179,7 +178,7 @@ public class ConvertBase extends Application{
 			int i;
 			boolean foundIt;
 			boolean invalidChar = false;
-//			int[] values = new int[newValue.length()];
+			values = new int[newValue.length()];
 
 			errorLabel.setText(null);
 			disableAll(false);
@@ -190,7 +189,7 @@ public class ConvertBase extends Application{
 				while (!foundIt && i < validChars.length) {
 					if (Character.toUpperCase(newValue.charAt(x)) == validChars[i]) {
 						foundIt = true;
-//						values[x] = i;
+						values[x] = i;
 						if (i > highestNum) {
 							highestNum = i;
 							disableButtons(highestNum);
@@ -205,10 +204,6 @@ public class ConvertBase extends Application{
 				}
 				x++;
 			}
-//			for (int j = 0; j < values.length; j++) {
-//				System.out.print(values[j] + ", ");
-//			}
-//			System.out.println();
 		}
     }
 	public void disableButtons(int highestNum) {
@@ -224,12 +219,13 @@ public class ConvertBase extends Application{
 			}
 			x++;
 		}
-		
 	}
 	public void resetControls() {
 		radioGroup1.selectToggle(null);
 		radioGroup2.selectToggle(null);
 		numberTextField.clear();
+		base1TextField.clear();
+		base2TextField.clear();
 		errorLabel.setText("");
 	}
 	public void disableAll(boolean truthValue) {
@@ -248,51 +244,33 @@ public class ConvertBase extends Application{
 	public class CalcButtonHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			String number;
 			Converter c;
 
 			if (numberTextField.getText().isEmpty()) {
 				errorLabel.setText("You must enter a number to convert");
 			}
-			else if (!getStartBase()) {
-				errorLabel.setText("Enter a base to convert from");
+			else if (getStartBase() == NO_BASE || getEndBase() == NO_BASE) {
+				errorLabel.setText("Enter a base to convert from and a base to convert from");
 			}
-			else if (!getEndBase()) {
-				errorLabel.setText("Enter a base to convert to");
+			else if (startBase == INVALID_BASE || endBase == INVALID_BASE) {
+				errorLabel.setText("Invalid base");
 			}
-//			else {
-//				startBase = getBaseValue(radioArray1);
-//				if (startBase == INVALID_BASE && !base1TextField.getText().isEmpty()) {
-//					try {
-//						startBase = Integer.parseInt(base1TextField.getText());
-//					} catch(NumberFormatException e) {
-//						convertIt = false;
-//						errorLabel.setText("Enter a base to convert from and to");
-//					}
-//				}
-//				else {
-//					convertIt = false;
-//				}
-//				endBase = getBaseValue(radioArray2);
-//				if (endBase == INVALID_BASE && otherButton2.isSelected()) {
-//					endBase = Integer.parseInt(base2TextField.getText());
-//				}
-//			}
-////
-//			if (startBase == INVALID_BASE || endBase == INVALID_BASE) {
-//				errorLabel.setText("Enter a base to convert from and to");
-//			}
+			else if (startBase == TOO_LOW) {
+				errorLabel.setText("Start Base too low.");
+			}
 			else {
 				number = numberTextField.getText().toUpperCase();
-//				System.out.println("start: " + startBase + " end: " + endBase + 
-//						" number: " + number);
 				c = new Converter(startBase, endBase, number);
 				c.convert();
 				
-				resultLabel.setText(c.getNewNumber());
+				newNumber = c.getNewNumber();
+				baseLabel1.setText("Start Base: " + startBase);
+				baseLabel2.setText("End Base: " + endBase);
+				numberLabel.setText("Number Converted: " + number);
+				resultLabel.setText("Result: " + newNumber);
 				stage.setScene(scene2);
 
-				stage.setTitle("Base Converter");
+				stage.setTitle("Result");
 			}
 		}
 	}
@@ -303,32 +281,40 @@ public class ConvertBase extends Application{
 			stage.setScene(scene1);
 		}
 	}
-	public boolean getStartBase() {
-		startBase = getBaseValue(radioArray1);
-		if (startBase == INVALID_BASE && !base1TextField.getText().isEmpty()) {
+	public class quitHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			System.exit(0);
+		}
+	}
+	public int getStartBase() {
+		startBase = getRadioBase(radioArray1);
+		if (startBase == NO_BASE && !base1TextField.getText().isEmpty()) {
 			try {
 				startBase = Integer.parseInt(base1TextField.getText());
+				validateStartBase();
 			} catch(NumberFormatException e) {
 				startBase = INVALID_BASE;
 			}
 		}
-		return startBase != INVALID_BASE;
+		return startBase;
 	}
-	public boolean getEndBase() {
-		endBase = getBaseValue(radioArray2);
-		if (endBase == INVALID_BASE && !base2TextField.getText().isEmpty()) {
+	public int getEndBase() {
+		endBase = getRadioBase(radioArray2);
+		if (endBase == NO_BASE && !base2TextField.getText().isEmpty()) {
 			try {
 				endBase = Integer.parseInt(base2TextField.getText());
+				validateEndBase();
 			} catch(NumberFormatException e) {
 				endBase = INVALID_BASE;
 			}
 		}
-		return endBase != INVALID_BASE;
+		return endBase;
 	}
-	public int getBaseValue(RadioButton[] arr) {
+	public int getRadioBase(RadioButton[] arr) {
 		int x = 0;
 		boolean foundIt = false;
-		int baseValue = INVALID_BASE;
+		int baseValue = NO_BASE;
 
 		while (!foundIt && x < arr.length) {
 			if (arr[x].isSelected()) {
@@ -338,6 +324,24 @@ public class ConvertBase extends Application{
 			x++;
 		}
 		return baseValue;
+	}
+	public void validateStartBase() {
+		int x = 0;
+		if (startBase < 1 || startBase > 16) {
+			startBase = INVALID_BASE;
+		}
+		else {
+			while (x < values.length && startBase != TOO_LOW) {
+				if (startBase <= values[x]) {
+					startBase = TOO_LOW;
+				}
+			}
+		}
+	}
+	public void validateEndBase() {
+		if (endBase < 1 || endBase > 16) {
+			endBase = INVALID_BASE;
+		}
 	}
 }
 	

@@ -1,0 +1,98 @@
+public class ConvertBase 
+    
+    num startBase
+    num endBase
+    char[] allChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}
+    num[] numberArray
+    num decimal
+    string number
+    string newNumber = ""
+    num quotient
+    num remainder
+    num total = 0
+
+    public Converter (num start, num end, string num) {
+        startBase = start
+        endBase = end
+        number = num
+    return
+
+    public void convert() 
+
+        if (startBase == 10) 
+            decimal = parseInt(number)
+            fromDecimal()
+        
+        else if (endBase == 10) 
+            toDecimal()
+            newNumber = toString(decimal)
+        
+        else 
+            toDecimal()
+            fromDecimal()
+        endif
+    return
+    
+    public void fromDecimal() 
+	quotient = decimal
+        while (quotient != 0) 
+            remainder = quotient % endBase
+            prepend(remainder)
+            quotient = quotient / endBase
+        endwhile
+    return
+    
+
+    public void toDecimal() 
+	toArray()
+	multiplyArray()
+	addArray()
+	decimal = total
+    return
+	
+
+    public void prepend(num digit) 
+        char nextDigit
+	nextDigit = allChars[digit]
+        newNumber = nextDigit + newNumber
+    return
+    
+
+    public void toArray() 
+        numberArray = new num[number.length()]
+        for (num i = 0; i < number.length(); i ++) 
+            num x = 0
+            boolean foundIt = false
+            while (x < allChars.length && !foundIt) 
+                if (number.charAt(i) == (allChars[x])) 
+                    foundIt = true
+                    numberArray[i] = x
+                endif
+                x++
+            endwhile
+        endfor
+    return
+    
+
+    public void multiplyArray() 
+        num power = numberArray.length - 1
+        for (num i = 0; i < numberArray.length; i++) 
+            numberArray[i] *= (num)Math.pow(startBase, power)
+            power--
+        endfor
+    return
+    
+
+    public void addArray() 
+        for (num x = 0; x < numberArray.length; x++) 
+            total += numberArray[x]
+        endfor
+    return
+
+    public string getNewNumeber()
+    return newNumber;
+
+endClass
+        
+    
+
