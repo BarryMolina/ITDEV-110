@@ -11,16 +11,16 @@ package convertbase;
  */
 public class Converter {
 	
-	int startBase;
-	int endBase;
+	private int startBase;
+	private int endBase;
 	static char[] allChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-    int[] numberArray;
-	int decimal;
-	String number;
-	String newNumber = "";
-	int quotient;
-	int remainder;
-	int total = 0;
+    private int[] numberArray;
+	private int decimal;
+	private String number;
+	private String newNumber = "";
+	private int quotient;
+	private int remainder;
+	private int total = 0;
 
 	public Converter (int start, int end, String num) {
 		startBase = start;

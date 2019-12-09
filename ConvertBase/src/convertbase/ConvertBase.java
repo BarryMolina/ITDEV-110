@@ -50,21 +50,21 @@ public class ConvertBase extends Application{
 	private Label baseLabel2;
 	private Label numberLabel;
 	private Label resultLabel;
-	String number;
-	String newNumber;
-	ToggleGroup radioGroup1;
-	ToggleGroup radioGroup2;
-	RadioButton[] radioArray1 = {binaryButton1, ternaryButton1, octalButton1, decimalButton1,
+	private String number;
+	private String newNumber;
+	private ToggleGroup radioGroup1;
+	private ToggleGroup radioGroup2;
+	private RadioButton[] radioArray1 = {binaryButton1, ternaryButton1, octalButton1, decimalButton1,
 							hexadecimalButton1};
-	RadioButton[] radioArray2 = {binaryButton2, ternaryButton2, octalButton2, decimalButton2,
+	private RadioButton[] radioArray2 = {binaryButton2, ternaryButton2, octalButton2, decimalButton2,
 							hexadecimalButton2};
-	int[] radioBaseValues = {2, 3, 8, 10, 16};
-	final int NO_BASE = -1;
-	final int INVALID_BASE = -9;
-	final int TOO_LOW = -99;
-	int startBase;
-	int endBase;
-	int[] values;
+	private int[] radioBaseValues = {2, 3, 8, 10, 16};
+	private final int NO_BASE = -1;
+	private final int INVALID_BASE = -9;
+	private final int TOO_LOW = -99;
+	private int startBase;
+	private int endBase;
+	private int[] values;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -278,6 +278,7 @@ public class ConvertBase extends Application{
 		@Override
 		public void handle(ActionEvent event) {
 			resetControls();
+            stage.setTitle("Base Converter");
 			stage.setScene(scene1);
 		}
 	}
