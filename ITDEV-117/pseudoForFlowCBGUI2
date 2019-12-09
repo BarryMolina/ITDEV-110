@@ -1,0 +1,179 @@
+//Checks if number contains valid characters (1-9, a-f)
+//and disabled buttons that no longer apply
+  public void changed(ObservableValue<extends string> observable, string oldValue, string newValue) ;
+  \//declarations
+      char\[\] validChars = Converter.allChars
+      num highestNum = 0
+      num x = 0
+      num i
+      boolean foundIt
+      boolean invalidChar = false
+      values = num\[newValue.length()\]
+
+      errorLabel.setText(null)
+      disableAll(false);
+// Compares chars in number to allChars array
+while (\!invalidChar AND x < newValue.length()?) {
+				i = 0;
+				foundIt = false;
+				//Compares single char
+				while (\!foundIt AND i < validChars.length?) {
+					if (Character.toUpperCase(newValue.charAt(x) == validChars[i])? {
+						foundIt = true;
+						values[x] = i;
+						//disables buttons that no longer apply
+						if (i > highestNum?) {
+							highestNum = i;
+							disableButtons(highestNum);
+						}
+					}
+					i++;
+				}
+				//invalid character
+				if (\!foundIt?) {
+					invalidChar = true;
+					errorLabel.setText("You must enter an integer or letter A-F");
+					disableAll(true);
+				}
+				x++;
+			}
+			return return
+
+	//Disables base options that no longer apply
+	public void disableButtons(num highestNum) {
+		num x = 0;
+		boolean validButton = false;
+		while (\!validButton AND x < radioBaseValues.length) {
+			if (radioBaseValues[x] <= highestNum) {
+				radioArray1[x].setSelected(false);
+				radioArray1[x].setDisable(true);
+			}
+			else {
+				validButton = true;
+			}
+			x++;
+		}
+			return return
+	}
+
+	//Clears text fields and button selections
+	public void resetControls() {
+		radioGroup1.selectToggle(null);
+		radioGroup2.selectToggle(null);
+		numberTextField.clear();
+		base1TextField.clear();
+		base2TextField.clear();
+		errorLabel.setText("");
+		return return
+	}
+
+//Disables or enables all radio buttons
+	public void disableAll(boolean truthValue) {
+		radioGroup1.getToggles().forEach(toggle -> {
+			Node node = (Node) toggle ;
+			node.setDisable(truthValue))
+	}
+return return
+
+
+		public void handle(ActionEvent event) {
+			Converter c;
+
+			if (numberTextField.getText().isEmpty()?) {
+				errorLabel.setText("You must enter a number to convert");
+			}
+			else if (getStartBase() == NO_BASE OR getEndBase() == NO_BASE?) {
+				errorLabel.setText("Enter a base to convert from and a base to convert from");
+			}
+			else if (startBase == INVALID_BASE OR endBase == INVALID_BASE?) {
+				errorLabel.setText("Invalid base");
+			}
+			else if (startBase == TOO_LOW?) {
+				errorLabel.setText("Start Base too low.");
+			}
+			else {
+				number = numberTextField.getText().toUpperCase();
+				c = Converter(startBase, endBase, number);
+				c.convert();
+				
+				newNumber = c.getNewNumber();
+				baseLabel1.setText("Start Base: " + startBase);
+				baseLabel2.setText("End Base: " + endBase);
+				numberLabel.setText("Number Converted: " + number);
+				resultLabel.setText("Result: " + newNumber);
+				stage.setScene(scene2);
+
+				stage.setTitle("Result");
+			}
+		}
+	return return
+
+//Resets fields and returns to first scene
+		public void handle(ActionEvent event) {
+			resetControls();
+			stage.setScene(scene1);
+		}
+	return return
+
+	//If a radio button is not selected, try to get value from base1TextField.
+	public num getStartBase() {
+		startBase = getRadioBase(radioArray1);
+		if (startBase == NO_BASE AND !base1TextField.getText().isEmpty()?) {
+			try {
+				startBase = parseInt(base1TextField.getText());
+				validateStartBase();
+			} catch(NumberFormatException e) {
+				startBase = INVALID_BASE;
+			}
+		}
+		return return startBase;
+	}
+
+	//If a radio button is not selected, try to get value from base2TextField.
+	public num getEndBase() {
+		endBase = getRadioBase(radioArray2);
+		if (endBase == NO_BASE AND !base2TextField.getText().isEmpty()?) {
+			try {
+				endBase = parseInt(base2TextField.getText());
+				validateEndBase();
+			} catch(NumberFormatException e) {
+				endBase = INVALID_BASE;
+			}
+		}
+		return return endBase;
+	}
+
+//Try to get base value from radio button
+	public int getRadioBase(RadioButton\[\] arr) {
+		int x = 0;
+		boolean foundIt = false;
+		num baseValue = NO_BASE;
+
+		while (\!foundIt AND x < arr.length?) {
+			if (arr[x].isSelected()?) {
+				foundIt = true;
+				baseValue = radioBaseValues\[x\];
+			}
+			x++;
+		}
+		return return baseValue;
+	}
+
+//Checks for valid start base
+	public void validateStartBase() {
+		num x = 0;
+		if (startBase < 1 OR startBase > 16?) {
+			startBase = INVALID_BASE;
+		}
+		else {
+			while (x < values.length AND startBase != TOO_LOW?) {
+				if (startBase <= values[x]?) {
+					startBase = TOO_LOW;
+				}
+				x++;
+			}
+		}
+	}
+	return return
+
+

@@ -26,7 +26,7 @@ import javafx.scene.Node;
  *
  * @author barrymolina
  */
-public class ConvertBase extends Application{
+public class ConvertBaseGUI extends Application{
 	private Stage stage;
 	private Scene scene1;
 	private Scene scene2;
