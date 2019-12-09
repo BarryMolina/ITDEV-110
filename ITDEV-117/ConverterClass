@@ -60,7 +60,7 @@ public class ConvertBase
         for (num i = 0; i < number.length(); i ++) 
             num x = 0
             boolean foundIt = false
-            while (x < allChars.length && !foundIt) 
+            while (x < allChars.length AND !foundIt) 
                 if (number.charAt(i) == (allChars[x])) 
                     foundIt = true
                     numberArray[i] = x

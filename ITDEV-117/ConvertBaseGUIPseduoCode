@@ -167,10 +167,10 @@ public class ConvertBase extends Application{
             errorLabel.setText(null)
             disableAll(false)
 
-            while (!invalidChar && x < newValue.length()) 
+            while (!invalidChar AND x < newValue.length()) 
                 i = 0
                 foundIt = false
-                while (!foundIt && i < validChars.length) 
+                while (!foundIt AND i < validChars.length) 
                     if (Character.toUpperCase(newValue.charAt(x)) == validChars[i]) 
                         foundIt = true
                         values[x] = i
@@ -194,7 +194,7 @@ public class ConvertBase extends Application{
     public void disableButtons(num highestNum) 
         num x = 0
         boolean validButton = false
-        while (!validButton && x < radioBaseValues.length) 
+        while (!validButton AND x < radioBaseValues.length) 
             if (radioBaseValues[x] <= highestNum) 
                 radioArray1[x].setSelected(false)
                 radioArray1[x].setDisable(true)
@@ -234,9 +234,9 @@ public class ConvertBase extends Application{
 
             if (numberTextField.getText().isEmpty()) 
                 errorLabel.setText("You must enter a number to convert")
-            else if (getStartBase() == NO_BASE || getEndBase() == NO_BASE) 
+            else if (getStartBase() == NO_BASE OR getEndBase() == NO_BASE) 
                 errorLabel.setText("Enter a base to convert from and a base to convert from")
-            else if (startBase == INVALID_BASE || endBase == INVALID_BASE) 
+            else if (startBase == INVALID_BASE OR endBase == INVALID_BASE) 
                 errorLabel.setText("Invalid base")
             else if (startBase == TOO_LOW) 
                 errorLabel.setText("Start Base too low.")
@@ -274,7 +274,7 @@ public class ConvertBase extends Application{
 
     public num getStartBase() 
         startBase = getRadioBase(radioArray1)
-        if (startBase == NO_BASE && !base1TextField.getText().isEmpty()) 
+        if (startBase == NO_BASE AND !base1TextField.getText().isEmpty()) 
             try 
                 startBase = Integer.parseInt(base1TextField.getText())
                 validateStartBase()
@@ -287,7 +287,7 @@ public class ConvertBase extends Application{
 
     public num getEndBase() 
         endBase = getRadioBase(radioArray2)
-        if (endBase == NO_BASE && !base2TextField.getText().isEmpty()) 
+        if (endBase == NO_BASE AND !base2TextField.getText().isEmpty()) 
             try 
                 endBase = Integer.parseInt(base2TextField.getText())
                 validateEndBase()
@@ -303,7 +303,7 @@ public class ConvertBase extends Application{
         boolean foundIt = false
         num baseValue = NO_BASE
 
-        while (!foundIt && x < arr.length) 
+        while (!foundIt AND x < arr.length) 
             if (arr[x].isSelected()) 
                 foundIt = true
                 baseValue = radioBaseValues[x]
@@ -314,10 +314,10 @@ public class ConvertBase extends Application{
 
     public void validateStartBase() 
         num x = 0
-        if (startBase < 1 || startBase > 16) 
+        if (startBase < 1 OR startBase > 16) 
             startBase = INVALID_BASE
         else 
-            while (x < values.length && startBase != TOO_LOW) 
+            while (x < values.length AND startBase != TOO_LOW) 
                 if (startBase <= values[x]) 
                     startBase = TOO_LOW
                 endif
@@ -327,7 +327,7 @@ public class ConvertBase extends Application{
     return
 
     public void validateEndBase() 
-        if (endBase < 1 || endBase > 16) 
+        if (endBase < 1 OR endBase > 16) 
             endBase = INVALID_BASE
         endif
     return
