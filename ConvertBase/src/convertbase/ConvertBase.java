@@ -335,6 +335,7 @@ public class ConvertBase extends Application{
 				if (startBase <= values[x]) {
 					startBase = TOO_LOW;
 				}
+				x++;
 			}
 		}
 	}
