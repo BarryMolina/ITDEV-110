@@ -67,15 +67,16 @@ public class WinBanner {
 		int length = banner[0].length();
 		int lineEnd;
 			
-		for (int lineStart = 0; lineStart < length; lineStart++) {
+		for (int lineStart = 0; lineStart < length; lineStart = lineStart + 4) {
 			// Ensures substring endIndex isnt greater than length
 			// to avoid out of bounds error
 			lineEnd = (lineStart + SCREEN_WIDTH < length? lineStart + SCREEN_WIDTH : length);
 			System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-			for (int i = 0; i < banner.length; i ++) {
+			for (int i = 0; i < banner.length; i++) {
 				System.out.println(banner[i].substring(lineStart, lineEnd));
 			}
 			Thread.sleep(250);
 		}
+		System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	}
 }

@@ -15,7 +15,11 @@ public class Molina_FinalProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException {
+		Admin a = new Admin();
+
+		a.intro();
         GameController gc = new GameController();
+		a.goodbye();
     }
     
 }

@@ -17,6 +17,7 @@ public class GameController {
 
     public GameController() throws InterruptedException {
 		Game g;
+		
 		do  {
 			g = new Game();
             g.play();
@@ -25,9 +26,10 @@ public class GameController {
     }
 	public char playAgain() {
         char again;
-		System.out.print("Would you like to play again? (y/n):");
+		System.out.print("Would you like to play again? (y/n): ");
         again = keyboard.next().toLowerCase().charAt(0);
         keyboard.nextLine();
+		System.out.println();
 
 		return again;
 	}

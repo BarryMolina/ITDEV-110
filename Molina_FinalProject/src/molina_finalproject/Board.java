@@ -79,10 +79,10 @@ public class Board {
 			if (row > 0) {
 				board[row - 1][idx] = 0;
 			}
-			//System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-			//printBoard();
+			System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+			printBoard();
 			row++;
-			//Thread.sleep(REFRESH_RATE);
+			Thread.sleep(REFRESH_RATE);
 		}
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         return row - 1;

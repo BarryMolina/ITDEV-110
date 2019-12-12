@@ -44,8 +44,8 @@ public class Game {
 			turn(current);
             current = otherPlayer(current);
 		}
-//		wb = new WinBanner(winner);
-//		wb.displayWinner();
+		wb = new WinBanner(winner);
+		wb.displayWinner();
 		System.out.println("Player " + winner + " Wins!\n");
     }
 	public void turn(int playerNum) throws InterruptedException {
@@ -73,6 +73,7 @@ public class Game {
 		select = keyboard.next().toLowerCase().charAt(0);
 		selectIdx = getIndex(select);
 		while (selectIdx == INVALID || selectIdx == FULL) {
+			System.out.println();
 			b.printBoard();
 			if (selectIdx == INVALID) {
 				System.out.println("Invalid selection.\n");
